@@ -64,3 +64,11 @@ def get_team_matches(team, data, filter_by='all'):
         condition = (team==data[:,3])
 
     return data[condition]
+
+def get_columns():
+    return [[
+        "Date", "HomeTeam", "AwayTeam", "Home Goals",
+        "Away Goals", "Result", "Home Shots",
+        "Away Shots", "Home on Target", "Away on Target",
+        "Home Corners", "Away Corners"
+    ], [1,2,3,4,5,6,11,12,13,14,16,17]]

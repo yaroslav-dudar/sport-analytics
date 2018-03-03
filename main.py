@@ -2,21 +2,21 @@
 # -*- coding: utf-8 -*-
 
 import numpy as np
-from parser import football_data_co_uk_parser, get_team_matches
+from parser import football_data_co_uk_parser, get_team_matches, get_columns
+
+from terminaltables import SingleTable
 
 data = football_data_co_uk_parser()
+col_names, col_indx = get_columns()
 
-team = 'Arsenal'
-arsenal_games = get_team_matches(team, data)
+if __name__ == '__main__':
+    games_amount = 20
+    team_1 = 'Brighton'
+    team_2 = 'Arsenal'
 
-arsenal_score = np.array([g[4] if g[2]==team else g[5] for g in arsenal_games]).astype(int)
-arsenal_miss = np.array([g[5] if g[2]==team else g[4] for g in arsenal_games]).astype(int)
+    team_1_games = get_team_matches(team_1, data, filter_by='home')[-games_amount:]
+    team_1_data = list(team_1_games[:,col_indx])
+    team_1_data.insert(0, col_names)
 
-print(arsenal_score)
-print(arsenal_miss)
-
-print(arsenal_score.mean())
-print(arsenal_miss.mean())
-
-print(arsenal_score.std())
-print(arsenal_miss.std())
+    view_table = SingleTable(team_1_data)
+    print(view_table.table)
