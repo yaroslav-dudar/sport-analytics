@@ -31,20 +31,20 @@ class TeamStats:
 
     def avg_total_shots(self):
         x, y = np.where(self.team_games == self.team)
-        return self.team_games[x,y+9].astype(int).std()
+        return self.team_games[x,y+9].astype(int).mean()
 
     def avg_shots_on_target(self):
         x, y = np.where(self.team_games == self.team)
-        return self.team_games[x,y+11].astype(int).std()
+        return self.team_games[x,y+11].astype(int).mean()
 
     def avg_op_total_shots(self):
         x, y = np.where(self.team_games == self.team)
         y[y==2] += 10
         y[y==3] += 8
-        return self.team_games[x,y].astype(int).std()
+        return self.team_games[x,y].astype(int).mean()
 
     def avg_op_shots_on_target(self):
         x, y = np.where(self.team_games == self.team)
         y[y==2] += 12
         y[y==3] += 10
-        return self.team_games[x,y].astype(int).std()
+        return self.team_games[x,y].astype(int).mean()

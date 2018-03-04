@@ -48,4 +48,5 @@ if __name__ == '__main__':
     team_2 = 'Arsenal'
 
     data = football_data_co_uk_parser()
+    print_team_report(team_1, data, filter_by='home')
     print_team_report(team_2, data, filter_by='away')
