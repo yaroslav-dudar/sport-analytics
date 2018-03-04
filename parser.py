@@ -66,9 +66,25 @@ def get_team_matches(team, data, filter_by='all'):
     return data[condition]
 
 def get_columns():
-    return [[
-        "Date", "HomeTeam", "AwayTeam", "Home Goals",
-        "Away Goals", "Result", "Home Shots",
-        "Away Shots", "Home on Target", "Away on Target",
-        "Home Corners", "Away Corners"
-    ], [1,2,3,4,5,6,11,12,13,14,16,17]]
+    return [1,[2,3],[4,5],6,[11,12],[13,14],[16,17]]
+
+def get_teams(data):
+    return np.array(["{0} - {1}".format(game[2], game[3]) for game in data])
+
+def get_goals(data):
+    return np.array(["{0} - {1}".format(game[4], game[5]) for game in data])
+
+def get_result(data):
+    return data[:,6]
+
+def get_total_shots(data):
+    return np.array(["{0} - {1}".format(game[11], game[12]) for game in data])
+
+def get_shots_on_target(data):
+    return np.array(["{0} - {1}".format(game[13], game[14]) for game in data])
+
+def get_corners(data):
+    return np.array(["{0} - {1}".format(game[16], game[17]) for game in data])
+
+def get_date(data):
+    return data[:,1]
