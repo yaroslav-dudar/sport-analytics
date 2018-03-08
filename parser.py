@@ -45,9 +45,13 @@ def football_data_co_uk_parser(_file='E0.csv'):
         HBP = Home Team Bookings Points (10 = yellow, 25 = red)
         ABP = Away Team Bookings Points (10 = yellow, 25 = red)
     """
+
     data = np.genfromtxt(os.path.join(DATA_DIR, _file), delimiter=',', dtype=str)
-    print(data[0])
-    return data
+    # some datasets don't have Referee column
+    # so we need to remove it
+    if 'Referee' in data[0]:
+        data = np.delete(data, 10, 1)
+    return data[1:]
 
 def get_team_matches(team, data, filter_by='all'):
     """
@@ -66,7 +70,7 @@ def get_team_matches(team, data, filter_by='all'):
     return data[condition]
 
 def get_columns():
-    return [1,[2,3],[4,5],6,[11,12],[13,14],[16,17]]
+    return [1,[2,3],[4,5],6,[10,11],[12,13],[15,16]]
 
 def get_teams(data):
     return np.array(["{0} - {1}".format(game[2], game[3]) for game in data])
@@ -78,13 +82,44 @@ def get_result(data):
     return data[:,6]
 
 def get_total_shots(data):
-    return np.array(["{0} - {1}".format(game[11], game[12]) for game in data])
+    return np.array(["{0} - {1}".format(game[10], game[11]) for game in data])
 
 def get_shots_on_target(data):
-    return np.array(["{0} - {1}".format(game[13], game[14]) for game in data])
+    return np.array(["{0} - {1}".format(game[14], game[13]) for game in data])
 
 def get_corners(data):
-    return np.array(["{0} - {1}".format(game[16], game[17]) for game in data])
+    return np.array(["{0} - {1}".format(game[15], game[16]) for game in data])
 
 def get_date(data):
     return data[:,1]
+
+def get_home_team_stats(game):
+    stats = game[[2,4,5,6,10,12]]
+
+    points = 0
+    if stats[3] == 'H':
+        stats[3] = 'W'
+        points = 3
+    elif stats[3] == 'A':
+        stats[3] = 'L'
+    else:
+        points = 1
+
+    return np.append(stats, [points])
+
+def get_away_team_stats(game):
+    stats = game[[3,5,4,6,11,13]]
+
+    points = 0
+    if stats[3] == 'H':
+        stats[3] = 'L'
+    elif stats[3] == 'A':
+        stats[3] = 'W'
+        points = 3
+    else:
+        points = 1
+
+    return np.append(stats, [points])
+
+def get_all_teams(data):
+    return list(np.unique(np.append(data[:, 2], data[:,3])))
