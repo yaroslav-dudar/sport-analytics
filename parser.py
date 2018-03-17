@@ -3,6 +3,7 @@
 
 import numpy as np
 import os
+import time
 
 DATA_DIR = './data'
 
@@ -69,9 +70,6 @@ def get_team_matches(team, data, filter_by='all'):
 
     return data[condition]
 
-def get_columns():
-    return [1,[2,3],[4,5],6,[10,11],[12,13],[15,16]]
-
 def get_teams(data):
     return np.array(["{0} - {1}".format(game[2], game[3]) for game in data])
 
@@ -85,13 +83,67 @@ def get_total_shots(data):
     return np.array(["{0} - {1}".format(game[10], game[11]) for game in data])
 
 def get_shots_on_target(data):
-    return np.array(["{0} - {1}".format(game[14], game[13]) for game in data])
+    return np.array(["{0} - {1}".format(game[12], game[13]) for game in data])
 
 def get_corners(data):
-    return np.array(["{0} - {1}".format(game[15], game[16]) for game in data])
+    return np.array(["{0} - {1}".format(game[16], game[17]) for game in data])
 
 def get_date(data):
     return data[:,1]
+
+def get_form(data, games, count_games=5):
+    """
+        Calculate teams form for the last <count_games>
+        win = 1 lose = 0 draw = 0.5
+        result = sum(game_form) / count_games
+    """
+    home = games[:,[1,2]]
+    away = games[:,[1,3]]
+
+    dates = np.array([
+        time.mktime(time.strptime(d, '%d/%m/%y'))  for d in data[:,1]
+    ])
+
+    home_scores = []
+    for t in home:
+        home_scores.append(get_team_score(t, data, dates, count_games))
+
+    away_scores = []
+    for t in away:
+        away_scores.append(get_team_score(t, data, dates, count_games))
+
+    result = []
+    for i,_ in enumerate(home_scores):
+        result.append("{0} - {1}".format(home_scores[i], away_scores[i]))
+    return result
+
+def get_team_score(game, data, dates, count_games):
+    game_date = time.mktime(time.strptime(game[0], '%d/%m/%y'))
+    game_team = game[1]
+
+    indexes = dates < game_date
+    prev_data = data[indexes]
+
+    # precondition: games already sorted by date
+    team_games = prev_data[(game_team==prev_data[:,2]) |
+        (game_team==prev_data[:,3])][-count_games:]
+
+    score = 0
+    for g in team_games:
+        if g[2] == game_team:
+            if g[6] == 'H':
+                score += 1
+        elif g[3] == game_team:
+            if g[6] == 'A':
+                score += 1
+
+        if g[6] == 'D':
+            score += 0.5
+
+    return score/count_games
+
+def get_team_postition():
+    pass
 
 def get_home_team_stats(game):
     stats = game[[2,4,5,6,10,12]]

@@ -3,12 +3,13 @@
 # -*- coding: utf-8 -*-
 
 import numpy as np
+
+from colorclass import Color
 from terminaltables import SingleTable
 
 from statistics import TeamStats
-
 from parser import (get_team_matches, get_teams, get_date, get_corners,
-    get_goals, get_total_shots, get_shots_on_target, get_result,
+    get_goals, get_total_shots, get_shots_on_target, get_result, get_form,
     get_all_teams, get_home_team_stats, get_away_team_stats)
 
 
@@ -20,28 +21,33 @@ def print_team_report(team, data, games_amount, filter_by='all'):
         get_date(games),get_teams(games),
         get_goals(games), get_result(games),
         get_total_shots(games), get_shots_on_target(games),
-        get_corners(games)
+        get_corners(games), get_form(data, games)
     )).T)
     report_column_names = [
-        "Date", "Home vs Away", "Full Time Score",
-        "Result", "Total Shots", "Shots on Target", "Corners"
+        "Date", "Home vs Away", "Full Time Score", "Result",
+        "Total Shots", "Shots on Target", "Corners", "Recent Form"
     ]
     report.insert(0, report_column_names)
 
     view_table = SingleTable(report)
 
     print(view_table.table)
-    print("Average goals scored: %s" % stats.avg_goals_score())
-    print("Average goals conceded: %s" %stats.avg_goals_concede())
-    print('='*30)
-    print("Standard deviation goals scored: %s" % stats.std_goals_score())
-    print("Standard deviation goals conceded: %s" %stats.std_goals_concede())
-    print('='*30)
-    print("Avg total shots: %s" % stats.avg_total_shots())
-    print("Avg shots on target: %s" %stats.avg_shots_on_target())
-    print('='*30)
-    print("Avg opponent total shots: %s" % stats.avg_op_total_shots())
-    print("Avg opponent shots on target: %s" %stats.avg_op_shots_on_target())
+    print(SingleTable([
+        [Color('{green}Average goals scored{/green}'), stats.avg_goals_score()],
+        [Color('{red}Average goals conceded{/red}'), stats.avg_goals_concede()]
+    ]).table)
+    print(SingleTable([
+        [Color('{green}Standard deviation goals scored{/green}'), stats.std_goals_score()],
+        [Color('{red}Standard deviation goals conceded{/red}'), stats.std_goals_concede()]
+    ]).table)
+    print(SingleTable([
+        [Color('{green}Avg total shots{/green}'), stats.avg_total_shots()],
+        [Color('{green}Avg shots on target{/green}'), stats.avg_shots_on_target()]
+    ]).table)
+    print(SingleTable([
+        [Color('{red}Avg opponent total shots{/red}'), stats.avg_op_total_shots()],
+        [Color('{red}Avg opponent shots on target{/red}'), stats.avg_op_shots_on_target()]
+    ]).table)
 
 
 def print_tournament_report(data, games_amount,
