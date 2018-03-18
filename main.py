@@ -6,6 +6,6 @@ from reports import print_team_report, print_tournament_report
 
 if __name__ == '__main__':  
 
-    data = football_data_co_uk_parser(_file='D1.csv')
-    print_team_report('Mainz', data, 5, filter_by='away')
-    #print_tournament_report(data, 5, filter_by='home')
+    data = football_data_co_uk_parser(_file='I1.csv')
+    print_team_report('Inter', data, 10, filter_by='all')
+    #print_tournament_report(data, 7, filter_by='home')

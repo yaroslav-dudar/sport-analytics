@@ -10,7 +10,7 @@ from terminaltables import SingleTable
 from statistics import TeamStats
 from parser import (get_team_matches, get_teams, get_date, get_corners,
     get_goals, get_total_shots, get_shots_on_target, get_result, get_form,
-    get_all_teams, get_home_team_stats, get_away_team_stats)
+    get_all_teams, get_home_team_stats, get_away_team_stats, get_postition)
 
 
 def print_team_report(team, data, games_amount, filter_by='all'):
@@ -18,14 +18,15 @@ def print_team_report(team, data, games_amount, filter_by='all'):
     stats = TeamStats(team, games)
 
     report = list(np.stack((
-        get_date(games),get_teams(games),
-        get_goals(games), get_result(games),
+        get_date(games),get_teams(games), get_goals(games), get_result(games),
         get_total_shots(games), get_shots_on_target(games),
-        get_corners(games), get_form(data, games)
+        get_corners(games), get_form(data, games), get_postition(data, games)
     )).T)
+
     report_column_names = [
         "Date", "Home vs Away", "Full Time Score", "Result",
-        "Total Shots", "Shots on Target", "Corners", "Recent Form"
+        "Total Shots", "Shots on Target", "Corners", "Recent Form",
+        "League Position"
     ]
     report.insert(0, report_column_names)
 

@@ -5,6 +5,9 @@ import numpy as np
 import os
 import time
 
+from operator import itemgetter
+from collections import OrderedDict
+
 DATA_DIR = './data'
 
 def football_data_co_uk_parser(_file='E0.csv'):
@@ -142,8 +145,63 @@ def get_team_score(game, data, dates, count_games):
 
     return score/count_games
 
-def get_team_postition():
-    pass
+def get_postition(data, games):
+    home = games[:,[1,2]]
+    away = games[:,[1,3]]
+
+    dates = np.array([
+        time.mktime(time.strptime(d, '%d/%m/%y'))  for d in data[:,1]
+    ])
+
+    home_pos = []
+    for t in home:
+        home_pos.append(get_team_postition(t, data, dates))
+
+    away_pos = []
+    for t in away:
+        away_pos.append(get_team_postition(t, data, dates))
+
+    result = []
+    for i,_ in enumerate(home_pos):
+        result.append("{0} - {1}".format(home_pos[i], away_pos[i]))
+    return result
+
+
+def get_team_postition(game, data, dates):
+    game_date = time.mktime(time.strptime(game[0], '%d/%m/%y'))
+    game_team = game[1]
+
+    indexes = dates < game_date
+    # all gemes before <game_date>
+    prev_games = data[indexes]
+
+    teams = get_all_teams(data)
+    # report: [points, goal diff]
+    report = {t: [0,0] for t in teams}
+
+    for g in prev_games:
+        h_points, a_points = report[g[2]][0], report[g[3]][0]
+        if g[6] == 'H':
+            h_points += 3
+
+        if g[6] == 'A':
+            a_points += 3
+
+        if g[6] == 'D':
+            h_points += 1
+            a_points += 1
+
+        report[g[2]][0] = h_points
+        report[g[2]][1] = report[g[2]][1] + int(g[4])-int(g[5])
+
+        report[g[3]][0] = a_points
+        report[g[3]][1] = report[g[3]][1] + int(g[5])-int(g[4])
+
+    sorted_report = sorted(report.items(), key=itemgetter(1), reverse=True)
+
+    team_pos = next((i for i,t in enumerate(sorted_report) if t[0] == game_team), None)
+    return team_pos+1
+
 
 def get_home_team_stats(game):
     stats = game[[2,4,5,6,10,12]]
