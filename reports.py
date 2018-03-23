@@ -12,6 +12,7 @@ from parser import (get_team_matches, get_teams, get_date, get_corners,
     get_goals, get_total_shots, get_shots_on_target, get_result, get_form,
     get_all_teams, get_home_team_stats, get_away_team_stats, get_postition)
 
+from utils import colorize_team_report, colorize
 
 def print_team_report(team, data, games_amount, filter_by='all'):
     games = get_team_matches(team, data, filter_by=filter_by)[-games_amount:]
@@ -28,27 +29,26 @@ def print_team_report(team, data, games_amount, filter_by='all'):
         "Total Shots", "Shots on Target", "Corners", "Recent Form",
         "League Position"
     ]
+
+    report = colorize_team_report(report, team)
     report.insert(0, report_column_names)
 
     view_table = SingleTable(report)
 
     print(view_table.table)
-    print(SingleTable([
-        [Color('{green}Average goals scored{/green}'), stats.avg_goals_score()],
-        [Color('{red}Average goals conceded{/red}'), stats.avg_goals_concede()]
-    ]).table)
-    print(SingleTable([
-        [Color('{green}Standard deviation goals scored{/green}'), stats.std_goals_score()],
-        [Color('{red}Standard deviation goals conceded{/red}'), stats.std_goals_concede()]
-    ]).table)
-    print(SingleTable([
-        [Color('{green}Avg total shots{/green}'), stats.avg_total_shots()],
-        [Color('{green}Avg shots on target{/green}'), stats.avg_shots_on_target()]
-    ]).table)
-    print(SingleTable([
-        [Color('{red}Avg opponent total shots{/red}'), stats.avg_op_total_shots()],
-        [Color('{red}Avg opponent shots on target{/red}'), stats.avg_op_shots_on_target()]
-    ]).table)
+
+    stats_table = SingleTable([
+        ['', 'Avg Goals Scored', 'SD goals scored', 'Avg total shots', 'Avg shots on target'],
+        [
+            'Team', colorize(stats.avg_goals_score()), colorize(stats.std_goals_score()),
+            colorize(stats.avg_total_shots()), colorize(stats.avg_shots_on_target())
+        ],
+        [
+            'Opponents', colorize(stats.avg_goals_concede(), 'red'), colorize(stats.std_goals_concede(), 'red'),
+            colorize(stats.avg_op_total_shots(), 'red'),  colorize(stats.avg_op_shots_on_target(), 'red')
+        ],
+    ])
+    print(stats_table.table)
 
 
 def print_tournament_report(data, games_amount,

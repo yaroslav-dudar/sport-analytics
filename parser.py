@@ -8,6 +8,8 @@ import time
 from operator import itemgetter
 from collections import OrderedDict
 
+from utils import colorize
+
 DATA_DIR = './data'
 
 def football_data_co_uk_parser(_file='E0.csv'):
@@ -208,10 +210,10 @@ def get_home_team_stats(game):
 
     points = 0
     if stats[3] == 'H':
-        stats[3] = 'W'
+        stats[3] = colorize('W')
         points = 3
     elif stats[3] == 'A':
-        stats[3] = 'L'
+        stats[3] = colorize('L', 'red')
     else:
         points = 1
 
@@ -222,9 +224,9 @@ def get_away_team_stats(game):
 
     points = 0
     if stats[3] == 'H':
-        stats[3] = 'L'
+        stats[3] = colorize('L', 'red')
     elif stats[3] == 'A':
-        stats[3] = 'W'
+        stats[3] = colorize('W')
         points = 3
     else:
         points = 1
