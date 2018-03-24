@@ -18,10 +18,13 @@ def print_team_report(team, data, games_amount, filter_by='all'):
     games = get_team_matches(team, data, filter_by=filter_by)[-games_amount:]
     stats = TeamStats(team, games)
 
+    recent_form = get_form(data, games)
+    team_positions = get_postition(data, games)
+
     report = list(np.stack((
         get_date(games),get_teams(games), get_goals(games), get_result(games),
         get_total_shots(games), get_shots_on_target(games),
-        get_corners(games), get_form(data, games), get_postition(data, games)
+        get_corners(games), recent_form, team_positions
     )).T)
 
     report_column_names = [
@@ -34,18 +37,19 @@ def print_team_report(team, data, games_amount, filter_by='all'):
     report.insert(0, report_column_names)
 
     view_table = SingleTable(report)
-
     print(view_table.table)
 
     stats_table = SingleTable([
-        ['', 'Avg Goals Scored', 'SD goals scored', 'Avg total shots', 'Avg shots on target'],
+        ['', 'Avg Goals Scored', 'SD goals scored', 'Avg total shots', 'Avg shots on target', 'Recent success rate', 'Recent position'],
         [
             'Team', colorize(stats.avg_goals_score()), colorize(stats.std_goals_score()),
-            colorize(stats.avg_total_shots()), colorize(stats.avg_shots_on_target())
+            colorize(stats.avg_total_shots()), colorize(stats.avg_shots_on_target()),
+            colorize(stats.get_team_recent_form())
         ],
         [
             'Opponents', colorize(stats.avg_goals_concede(), 'red'), colorize(stats.std_goals_concede(), 'red'),
-            colorize(stats.avg_op_total_shots(), 'red'),  colorize(stats.avg_op_shots_on_target(), 'red')
+            colorize(stats.avg_op_total_shots(), 'red'),  colorize(stats.avg_op_shots_on_target(), 'red'),
+            colorize(stats.op_form(recent_form), 'red'), colorize(stats.op_position(team_positions), 'red'),
         ],
     ])
     print(stats_table.table)
