@@ -4,6 +4,7 @@
 import numpy as np
 import os
 import time
+from io import StringIO
 
 from operator import itemgetter
 from collections import OrderedDict
@@ -12,7 +13,7 @@ from utils import colorize
 
 DATA_DIR = './data'
 
-def football_data_co_uk_parser(_file='E0.csv'):
+def football_data_co_uk_parser(_file='E0.csv', _dir=DATA_DIR):
     """
         Key to results data:
 
@@ -51,8 +52,25 @@ def football_data_co_uk_parser(_file='E0.csv'):
         HBP = Home Team Bookings Points (10 = yellow, 25 = red)
         ABP = Away Team Bookings Points (10 = yellow, 25 = red)
     """
+    rows = []
+    max_row_len = -1
+    for line in open(os.path.join(_dir, _file)):
+        row = np.loadtxt(StringIO(line), dtype=str, delimiter=',')
+        rows.append(row)
 
-    data = np.genfromtxt(os.path.join(DATA_DIR, _file), delimiter=',', dtype=str)
+        if len(row) > max_row_len:
+            max_row_len = len(row)
+
+    data = []
+    # fill missing columns with empty string
+    for row in rows:
+        row_len_diff = max_row_len - len(row)
+        row = np.append(row, ['']*row_len_diff)
+        data.append(row)
+
+    del rows
+    data = np.array(data)
+
     # some datasets don't have Referee column
     # so we need to remove it
     if 'Referee' in data[0]:
@@ -122,16 +140,22 @@ def get_form(data, games, count_games=5):
         result.append("{0} - {1}".format(home_scores[i], away_scores[i]))
     return result
 
-def get_team_score(game, data, dates, count_games):
+def get_team_score(game, data, dates, count_games, filter_by='all'):
     game_date = time.mktime(time.strptime(game[0], '%d/%m/%y'))
     game_team = game[1]
 
     indexes = dates < game_date
     prev_data = data[indexes]
 
+    if filter_by == 'all':
+        condition = (game_team==prev_data[:,2]) | (game_team==prev_data[:,3])
+    elif filter_by == 'home':
+        condition = (game_team==prev_data[:,2])
+    elif filter_by == 'away':
+        condition = (game_team==prev_data[:,3])
+
     # precondition: games already sorted by date
-    team_games = prev_data[(game_team==prev_data[:,2]) |
-        (game_team==prev_data[:,3])][-count_games:]
+    team_games = prev_data[condition][-count_games:]
 
     score = 0
     for g in team_games:

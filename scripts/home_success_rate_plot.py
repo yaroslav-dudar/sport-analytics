@@ -36,7 +36,7 @@ def collect(data):
         
         score += tmp_score/len(home_games)
 
-    return int(data[0][1].split('/')[-1]), score/len(teams)
+    return  time.strptime(data[0][1], '%d/%m/%y').tm_year, score/len(teams)
 
 
 if __name__ == '__main__':
