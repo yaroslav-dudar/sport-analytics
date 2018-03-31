@@ -4,40 +4,131 @@
 import numpy as np
 from io import StringIO
 
+from operator import itemgetter
+from collections import OrderedDict
+
+import time
+
 class DataSet:
     
+    # specify field indexes
+    DATE = 0
+    HOME = 1
+    AWAY = 2
+
+    FTHG = 3
+    FTAG = 4
+
+    HS = 5
+    AS = 6
+
+    HST = 7
+    AST = 8
+
+    HC = 9
+    AC = 10
+
+    FTR = 11
+
     def __init__(self, data):
         self.data = data
 
-        # specify field indexes
-        self.DATE = 0
-        self.HOME = 1
-        self.AWAY = 2
-
-        self.HS = 3
-        self.AS = 4
-
-        self.HST = 5
-        self.AST = 6
-
-        self.HC = 7
-        self.AC = 8 
+        self.TS_DATES = np.array([
+            time.mktime(time.strptime(d, '%d/%m/%y')) for d in self.data[:,self.DATE]
+        ])
 
     def get_games(self, team, filter_by='all'):
+        condition = self.filter(team, filter_by)
+        return self.data[condition]
+
+    def get_all_teams(self):
+        return list(np.unique(np.append(self.data[:, self.HOME], self.data[:, self.AWAY])))
+
+    def filter(self, team, filter_by, data=np.array([])):
         """
         @filter_by:
             - all : get all team matches
             - home : get only home matches
             - away : get only away matches
         """
-        if filter_by == 'all':
-            condition = (team==self.data[:,self.HOME]) | (team==self.data[:,self.AWAY])
-        elif filter_by == 'home':
-            condition = (team==self.data[:,self.HOME])
-        elif filter_by == 'away':
-            condition = (team==self.data[:,self.AWAY])
 
-        return self.data[condition]
+        if data.size == 0:
+            data = self.data
+
+        if filter_by == 'all':
+            condition = (team==data[:,self.HOME]) | (team==data[:,self.AWAY])
+        elif filter_by == 'home':
+            condition = (team==data[:,self.HOME])
+        elif filter_by == 'away':
+            condition = (team==data[:,self.AWAY])
+
+        return condition
+
+    def get_success_rate(self, date, team, prev_games=5, filter_by='all'):
+        """
+            Calculate team form for the last <prev_games>
+            where date > game_date
+
+            win = 1 lose = 0 draw = 0.5
+            result = sum(game_form) / prev_games
+        """
+
+        ts_date = time.mktime(time.strptime(date, '%d/%m/%y'))
+        prev_data = self.data[self.TS_DATES < ts_date]
+        condition = self.filter(team, filter_by, prev_data)
+
+        # Precondition: games already sorted by date
+        team_games = prev_data[condition][-prev_games:]
+
+        score = 0
+        for game in team_games:
+            if game[self.HOME] == team:
+                if game[self.FTR] == 'H':
+                    score += 1
+            elif game[self.AWAY] == team:
+                if game[self.FTR] == 'A':
+                    score += 1
+
+            if game[self.FTR] == 'D':
+                score += 0.5
+
+        return score/prev_games
+
+    def get_postition(self, date, team):
+        """ Get team league position before given date """
+
+        ts_date = time.mktime(time.strptime(date, '%d/%m/%y'))
+        # all gemes before <game_date>
+        prev_games = self.data[self.TS_DATES < ts_date]
+
+        teams = self.get_all_teams()
+        # report: [points, goal diff]
+        report = {t: [0,0] for t in teams}
+
+        for game in prev_games:
+            h_points, a_points = report[game[self.HOME]][0], report[game[self.AWAY]][0]
+            if game[self.FTR] == 'H':
+                h_points += 3
+
+            if game[self.FTR] == 'A':
+                a_points += 3
+
+            if game[self.FTR] == 'D':
+                h_points += 1
+                a_points += 1
+
+            report[game[self.HOME]][0] = h_points
+            report[game[self.HOME]][1] = report[game[self.HOME]][1] +\
+                int(game[self.FTHG])-int(game[self.FTAG])
+
+            report[game[self.AWAY]][0] = a_points
+            report[game[self.AWAY]][1] = report[game[self.AWAY]][1] +\
+                int(game[self.FTAG])-int(game[self.FTHG])
+
+        sorted_report = sorted(report.items(), key=itemgetter(1), reverse=True)
+
+        team_pos = next((i for i,t in enumerate(sorted_report) if t[0] == team), None)
+        return team_pos+1
 
 
 class DataLoader:
@@ -50,13 +141,32 @@ class DataLoader:
     def to_dataset(self):
         """
             Convert data to numpy array in a given format
-            [Date, Home Team, Away Team, Home Team Goals, Away Team Goals, Home Team Shots]
+            [
+                Date, Home Team, Away Team, Home Team Goals,
+                Away Team Goals, Home Team Shots, Away Team Shots,
+                Home Team Shots on Target, Away Team Shots on Target,
+                Home Team Corners, Away Team Corners
+            ]
         """
-        data = self.data[:,[
-            self.DATE, self.HOME, self.AWAY, self.HS,
-            self.AS, self.HST, self.AST, self.HC, self.AC]
-        ]
+        indexes = []
+        indexes.insert(DataSet.DATE, self.DATE)
+        indexes.insert(DataSet.HOME, self.HOME)
+        indexes.insert(DataSet.AWAY, self.AWAY)
+        indexes.insert(DataSet.FTR, self.FTR)
 
+        indexes.insert(DataSet.FTHG, self.FTHG)
+        indexes.insert(DataSet.FTAG, self.FTAG)
+
+        indexes.insert(DataSet.HS, self.HS)
+        indexes.insert(DataSet.AS, self.AS)
+
+        indexes.insert(DataSet.HST, self.HST)
+        indexes.insert(DataSet.AST, self.AST)
+
+        indexes.insert(DataSet.HC, self.HC)
+        indexes.insert(DataSet.AC, self.AC)
+
+        data = self.data[:,indexes]
         return DataSet(data)
 
 
@@ -88,6 +198,7 @@ class FootballDataLoader(DataLoader):
         self.DATE = self.columns.index('Date')
         self.HOME = self.columns.index('HomeTeam')
         self.AWAY = self.columns.index('AwayTeam')
+        self.FTR = self.columns.index('FTR')
 
         self.HS = self.columns.index('HS')
         self.AS = self.columns.index('AS')
@@ -97,3 +208,6 @@ class FootballDataLoader(DataLoader):
 
         self.HC = self.columns.index('HC')
         self.AC = self.columns.index('AC')
+
+        self.FTHG = self.columns.index('FTHG')
+        self.FTAG = self.columns.index('FTAG')
