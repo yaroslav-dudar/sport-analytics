@@ -94,7 +94,7 @@ class DataSet:
 
         return score/prev_games
 
-    def get_postition(self, date, team):
+    def get_position(self, date, team):
         """ Get team league position before given date """
 
         ts_date = time.mktime(time.strptime(date, '%d/%m/%y'))
