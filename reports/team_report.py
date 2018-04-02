@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import numpy as np
+import time
 
 from terminaltables import SingleTable
 
@@ -18,11 +19,17 @@ class TeamReport:
         self.dataset = dataset
         self.games = dataset.get_games(team, filter_by)[-amount_games:]
 
+        self.opponents_form = []
+        self.opponents_pos = []
+
     def print(self):
+        form = self.get_form()
+        position = self.get_position()
+
         report = list(np.stack((
             self.get_date(), self.get_teams(), self.get_goals(), self.get_result(),
             self.get_total_shots(), self.get_shots_on_target(),
-            self.get_corners(), self.get_form(), self.get_position()
+            self.get_corners(), form, position
         )).T)
 
         report_column_names = [
@@ -36,6 +43,35 @@ class TeamReport:
 
         view_table = SingleTable(report)
         print(view_table.table)
+
+        self.print_statistics()
+
+    def print_statistics(self):
+        from statistics import TeamStats
+
+        stats = TeamStats(self.team, self.games)
+
+        date = time.strftime('%d/%m/%y', time.gmtime())
+        team_recent_form = self.dataset.get_success_rate(
+            date, self.team, self.amount_games, self.filter_by
+        )
+        opponents_recent_form = sum(self.opponents_form) / self.amount_games
+        opponents_pos = sum(self.opponents_pos) / self.amount_games
+
+        stats_table = SingleTable([
+            ['', 'Avg Goals Scored', 'SD goals scored', 'Avg total shots', 'Avg shots on target', 'Recent success rate', 'Recent position'],
+            [
+                'Team', colorize(stats.avg_goals_score()), colorize(stats.std_goals_score()),
+                colorize(stats.avg_total_shots()), colorize(stats.avg_shots_on_target()),
+                colorize(team_recent_form)
+            ],
+            [
+                'Opponents', colorize(stats.avg_goals_concede(), 'red'), colorize(stats.std_goals_concede(), 'red'),
+                colorize(stats.avg_op_total_shots(), 'red'),  colorize(stats.avg_op_shots_on_target(), 'red'),
+                colorize(opponents_recent_form, 'red'), colorize(opponents_pos, 'red'),
+            ],
+        ])
+        print(stats_table.table)
 
     def colorize_report(self, report):
         result = []
@@ -70,7 +106,11 @@ class TeamReport:
     def get_form(self):
         recent_form = []
 
-        for game in self.games:
+        _, team_index = np.where(self.games == self.team)
+        team_index[team_index==self.dataset.HOME] = 0
+        team_index[team_index==self.dataset.AWAY] = 1
+
+        for i, game in enumerate(self.games):
             date, home, away = game[[
                 self.dataset.DATE, self.dataset.HOME, self.dataset.AWAY
             ]]
@@ -79,12 +119,21 @@ class TeamReport:
             away_form = self.dataset.get_success_rate(date, away)
             recent_form.append("{0} - {1}".format(home_form, away_form))
 
+            if team_index[i] == 0:
+                self.opponents_form.append(away_form)
+            else:
+                self.opponents_form.append(home_form)
+
         return recent_form
 
     def get_position(self):
         league_positions = []
 
-        for game in self.games:
+        _, team_index = np.where(self.games == self.team)
+        team_index[team_index==self.dataset.HOME] = 0
+        team_index[team_index==self.dataset.AWAY] = 1
+
+        for i, game in enumerate(self.games):
             date, home, away = game[[
                 self.dataset.DATE, self.dataset.HOME, self.dataset.AWAY
             ]]
@@ -92,6 +141,11 @@ class TeamReport:
             home_pos = self.dataset.get_position(date, home)
             away_pos = self.dataset.get_position(date, away)
             league_positions.append("{0} - {1}".format(home_pos, away_pos))
+
+            if team_index[i] == 0:
+                self.opponents_pos.append(away_pos)
+            else:
+                self.opponents_pos.append(home_pos)
 
         return league_positions
 
