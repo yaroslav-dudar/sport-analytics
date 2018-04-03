@@ -22,6 +22,8 @@ class TeamReport:
         self.opponents_form = []
         self.opponents_pos = []
 
+        self.calculate_team_index()
+
     def print(self):
         form = self.get_form()
         position = self.get_position()
@@ -76,16 +78,13 @@ class TeamReport:
     def colorize_report(self, report):
         result = []
 
-        for data in report:
-            teams = data[1].split('-')
+        for i, data in enumerate(report):
             result.append([data[0]])
 
-            if teams[0].strip() == self.team:
+            if self.team_index[i] == 0:
                 _team, _opponent = 0, 1
-            elif teams[1].strip() == self.team:
+            elif self.team_index[i] == 1:
                 _team, _opponent = 1, 0
-            else:
-                raise Exception()
 
             for i in range(len(data)-1):
                 stats = data[i+1].split('-')
@@ -103,12 +102,20 @@ class TeamReport:
 
         return result
 
-    def get_form(self):
-        recent_form = []
+    def calculate_team_index(self):
+        """
+            if self.team == Home index=0
+            if self.team == Away index=0
+        """
 
         _, team_index = np.where(self.games == self.team)
         team_index[team_index==self.dataset.HOME] = 0
         team_index[team_index==self.dataset.AWAY] = 1
+
+        self.team_index = team_index
+
+    def get_form(self):
+        recent_form = []
 
         for i, game in enumerate(self.games):
             date, home, away = game[[
@@ -119,7 +126,7 @@ class TeamReport:
             away_form = self.dataset.get_success_rate(date, away)
             recent_form.append("{0} - {1}".format(home_form, away_form))
 
-            if team_index[i] == 0:
+            if self.team_index[i] == 0:
                 self.opponents_form.append(away_form)
             else:
                 self.opponents_form.append(home_form)
@@ -128,10 +135,6 @@ class TeamReport:
 
     def get_position(self):
         league_positions = []
-
-        _, team_index = np.where(self.games == self.team)
-        team_index[team_index==self.dataset.HOME] = 0
-        team_index[team_index==self.dataset.AWAY] = 1
 
         for i, game in enumerate(self.games):
             date, home, away = game[[
@@ -142,7 +145,7 @@ class TeamReport:
             away_pos = self.dataset.get_position(date, away)
             league_positions.append("{0} - {1}".format(home_pos, away_pos))
 
-            if team_index[i] == 0:
+            if self.team_index[i] == 0:
                 self.opponents_pos.append(away_pos)
             else:
                 self.opponents_pos.append(home_pos)
