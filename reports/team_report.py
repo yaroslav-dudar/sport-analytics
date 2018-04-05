@@ -75,6 +75,16 @@ class TeamReport:
         ])
         print(stats_table.table)
 
+        total_table = SingleTable([
+            ['Over 2.5', 'Under 2.5', 'Over 3.5', 'Under 3.5', 'Clean sheet', 'BTTS'],
+            [
+                colorize(stats.total_over_2_5()), colorize(stats.total_under_2_5()),
+                colorize(stats.total_over_3_5()), colorize(stats.total_under_3_5()),
+                colorize(stats.clean_sheet()), colorize(stats.btts())
+            ]
+        ])
+        print(total_table.table)
+
     def colorize_report(self, report):
         result = []
 
