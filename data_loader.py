@@ -130,8 +130,65 @@ class DataSet:
         team_pos = next((i for i,t in enumerate(sorted_report) if t[0] == team), None)
         return team_pos+1
 
+    def get_league_table(self, prev_games=5):
+        """
+            Structure is: points, goals scored, goals cons, game results list
+        """
+        teams = self.get_all_teams()
+        table = {t: [0,0,0,[]] for t in teams}
 
-class DataLoader:
+        for game in np.flip(self.data, axis=0):
+            home = self._get_team_stats(game, 'home')
+            away = self._get_team_stats(game, 'away')
+
+            for team in [home, away]:
+                team_stats = table[team['team']]
+                if len(team_stats[3]) < prev_games:
+                    team_stats[0] += team['points']
+                    team_stats[1] += team['score']
+                    team_stats[2] += team['cons']
+                    team_stats[3].insert(0, team['result'])
+
+                # remove team for which all stats are collected
+                if len(team_stats[3]) == prev_games:
+                    try:
+                        teams.remove(team['team'])
+                    except ValueError:
+                        pass
+
+            if not teams:
+                break
+
+        result_table = [[team]+stats for team, stats in table.items()]
+        result_table.sort(key=lambda x: x[1], reverse=True)
+        return result_table
+
+    def _get_team_stats(self, game, side='home'):
+        stats, game_result = {}, game[self.FTR]
+
+        if side == 'home':
+            team = game[self.HOME]
+            score, cons, win = game[self.FTHG], game[self.FTAG], 'H'
+        elif side == 'away':
+            team = game[self.AWAY]
+            score, cons, win = game[self.FTAG], game[self.FTHG], 'A'
+
+        if game_result == win:
+            stats['points'] = 3
+            game_result = 'W'
+        elif game_result == 'D':
+            stats['points'] = 1
+        else:
+            stats['points'] = 0
+            game_result = 'L'
+
+        stats['team'] = team
+        stats['score'] = int(score)
+        stats['cons'] = int(cons)
+        stats['result'] = game_result
+        return stats
+
+class DataSource:
     def __init__(self, file_path):
         self.file_path = file_path
 
@@ -170,7 +227,7 @@ class DataLoader:
         return DataSet(data)
 
 
-class FootballDataLoader(DataLoader):
+class FootballDataCoUK(DataSource):
     def _load_data(self):
         rows, max_row_len = [], -1
 
