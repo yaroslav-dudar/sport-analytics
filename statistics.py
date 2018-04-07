@@ -3,7 +3,7 @@
 
 import numpy as np
 
-from data_loader import DataSet
+from data_utils.dataset import DataSet
 
 class TeamStats:
 

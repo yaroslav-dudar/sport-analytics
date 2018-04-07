@@ -3,7 +3,7 @@
 
 import matplotlib.pyplot as plt
 
-from parser import (
+from deprecated.parser import (
     football_data_co_uk_parser, get_all_teams,
     get_team_matches, get_team_score, get_team_postition)
 
@@ -53,10 +53,10 @@ def collect(data):
 if __name__ == '__main__':
     success_rate, opponents_form = [], []
     
-    files = os.listdir("./data/EPL")
+    files = os.listdir("./data/BL1")
 
     for f in files:
-        data = football_data_co_uk_parser(_file=f, _dir='./data/EPL')
+        data = football_data_co_uk_parser(_file=f, _dir='./data/BL1')
         x, y = collect(data)
         success_rate.extend(x)
         opponents_form.extend(y)

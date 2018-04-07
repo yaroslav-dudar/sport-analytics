@@ -7,7 +7,7 @@ import numpy as np
 import time
 import os
 
-from parser import (
+from deprecated.parser import (
     football_data_co_uk_parser, get_all_teams,
     get_team_matches, get_team_score, get_team_postition)
 

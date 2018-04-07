@@ -5,6 +5,11 @@ import numpy as np
 import os
 import time
 from io import StringIO
+import warnings
+warnings.simplefilter('always', DeprecationWarning)
+warnings.warn("parser module is deprecated",
+    DeprecationWarning, stacklevel=2
+)
 
 from operator import itemgetter
 from collections import OrderedDict

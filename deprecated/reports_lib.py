@@ -4,6 +4,9 @@
 
 import numpy as np
 
+import warnings
+warnings.simplefilter('always', DeprecationWarning)
+
 from colorclass import Color
 from terminaltables import SingleTable
 
@@ -14,7 +17,13 @@ from parser import (get_team_matches, get_teams, get_date, get_corners,
 
 from utils import colorize_team_report, colorize
 
+
 def print_team_report(team, data, games_amount, filter_by='all'):
+    warnings.warn(
+        "print_team_report module is deprecated",
+        DeprecationWarning, stacklevel=2
+    )
+
     games = get_team_matches(team, data, filter_by=filter_by)[-games_amount:]
     stats = TeamStats(team, games)
 
@@ -58,6 +67,10 @@ def print_team_report(team, data, games_amount, filter_by='all'):
 def print_tournament_report(data, games_amount,
         sort_by='points', filter_by='all'):
     
+    warnings.warn(
+        "print_tournament_report module is deprecated",
+        DeprecationWarning, stacklevel=2
+    )
     teams = get_all_teams(data)
     sort_index = {'points': 1}
     # report structure
