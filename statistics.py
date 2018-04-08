@@ -92,3 +92,6 @@ class TeamStats:
 
         concede = self.team_games[x,y].astype(int)
         return (concede == 0).sum() / len(concede)
+
+    def goal_diff(self):
+        return self.avg_goals_score() - self.avg_goals_concede()

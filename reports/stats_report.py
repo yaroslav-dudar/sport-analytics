@@ -7,6 +7,7 @@ import time
 from terminaltables import SingleTable
 
 from statistics import TeamStats
+from utils import colorize
 
 class StatsReport:
 
@@ -16,6 +17,18 @@ class StatsReport:
         self.filter_by = filter_by
         self.sort_by = sort_by
 
+    def get_report_fields(self, team_stat):
+        """
+            Dynamically create report fields.
+            Alsways start with Team name and sort_by field
+        """
+        report_column_names = ["Team", self.sort_by]
+        for stat in team_stat[1]:
+            if stat != self.sort_by:
+                report_column_names.append(stat)
+
+        return report_column_names
+
     def print(self):
         stats = self.collect_stats()
         try:
@@ -23,16 +36,12 @@ class StatsReport:
         except KeyError:
             raise ValueError('Invalid sort_by value')
 
-        report_column_names = [
-            "Team", "Clean Sheet", "BTTS", "Avg Score", "Avg Concede", "Total>2.5", "Total>3.5"
-        ]
+        self.colorize(stats)
+        report_column_names = self.get_report_fields(stats[0])
 
         stats_list = []
         for t in stats:
-            team_stats = [
-                t[0], t[1]['clean_sheet'], t[1]['btts'], t[1]['avg_score'],
-                t[1]['avg_concede'], t[1]['total>2.5'], t[1]['total>3.5']
-            ]
+            team_stats = [t[0]] + [t[1][key] for key in report_column_names[1:]]
             stats_list.append(team_stats)
 
         stats_list.insert(0, report_column_names)
@@ -51,7 +60,31 @@ class StatsReport:
             stats[t]['btts'] = team_stats.btts()
             stats[t]['avg_score'] = team_stats.avg_goals_score()
             stats[t]['avg_concede'] = team_stats.avg_goals_concede()
+            stats[t]['goal_diff'] = round(team_stats.goal_diff(), 2)
             stats[t]['total>2.5'] = team_stats.total_over_2_5()
             stats[t]['total>3.5'] = team_stats.total_over_3_5()
 
         return stats
+
+    def colorize(self, stats):
+        colors_list = ['red', 'yellow', 'green']
+
+        color_ranges = {}
+        for stat in stats[0][1]:
+            vals = [s[1][stat] for s in stats]
+            min_val, max_val = min(vals), max(vals)
+            step = (max_val - min_val) / len(colors_list)
+            intervals = np.arange(min_val, max_val+0.000001, step)
+            
+            color_ranges[stat] = [
+                (round(intervals[i[0]],2), round(intervals[i[0]+1],2))
+                for i,_ in np.ndenumerate(intervals[:len(colors_list)])
+            ]
+
+        for s in stats:
+            for stat in s[1]:
+                for i, interval in enumerate(color_ranges[stat]):
+                    if interval[0] <= s[1][stat] <= interval[1]:
+                        color_i = i
+
+                s[1][stat] = colorize(s[1][stat], colors_list[color_i])
