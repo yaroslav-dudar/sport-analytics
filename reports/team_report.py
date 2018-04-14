@@ -12,6 +12,7 @@ class TeamReport:
 
     def __init__(self, dataset, team, amount_games=5, filter_by='all'):
         self.color = 'green'
+
         self.team = team
         self.filter_by = filter_by
         self.amount_games = amount_games
@@ -100,7 +101,14 @@ class TeamReport:
                 stats = data[i+1].split('-')
 
                 if len(stats) < 2:
-                    result[-1].insert(i+1, data[i+1])
+                    if data[i+1] == 'D':
+                        col = 'white'
+                    elif data[i+1] == 'H':
+                        col = self.color if _team == 0 else 'red'
+                    elif data[i+1] == 'A':
+                         col = self.color if _team == 1 else 'red'
+
+                    result[-1].insert(i+1, colorize(data[i+1], color=col))
                     continue
 
                 team_stat = colorize(stats[_team].strip(), color=self.color)

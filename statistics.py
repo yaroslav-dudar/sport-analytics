@@ -95,3 +95,11 @@ class TeamStats:
 
     def goal_diff(self):
         return self.avg_goals_score() - self.avg_goals_concede()
+
+    def failed_to_score(self):
+        x, y = np.where(self.team_games == self.team)
+        y[y==DataSet.HOME] = DataSet.FTHG
+        y[y==DataSet.AWAY] = DataSet.FTAG
+
+        scored = self.team_games[x,y].astype(int)
+        return (scored == 0).sum() / len(scored)

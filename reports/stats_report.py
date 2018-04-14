@@ -56,13 +56,14 @@ class StatsReport:
             games = self.dataset.get_games(t, self.filter_by)[-self.amount_games:]
             team_stats = TeamStats(t, games)
             
-            stats[t]['clean_sheet'] = team_stats.clean_sheet()
-            stats[t]['btts'] = team_stats.btts()
-            stats[t]['avg_score'] = team_stats.avg_goals_score()
-            stats[t]['avg_concede'] = team_stats.avg_goals_concede()
-            stats[t]['goal_diff'] = round(team_stats.goal_diff(), 2)
-            stats[t]['total>2.5'] = team_stats.total_over_2_5()
-            stats[t]['total>3.5'] = team_stats.total_over_3_5()
+            stats[t]['clean_sheet'] = round(team_stats.clean_sheet(), 3)
+            stats[t]['btts'] = round(team_stats.btts(), 3)
+            stats[t]['avg_score'] = round(team_stats.avg_goals_score(), 3)
+            stats[t]['avg_concede'] = round(team_stats.avg_goals_concede(), 3)
+            stats[t]['goal_diff'] = round(team_stats.goal_diff(), 3)
+            stats[t]['total>2.5'] = round(team_stats.total_over_2_5(), 3)
+            stats[t]['total>3.5'] = round(team_stats.total_over_3_5(), 3)
+            stats[t]['failed_to_score'] = round(team_stats.failed_to_score(), 3)
 
         return stats
 
@@ -77,7 +78,7 @@ class StatsReport:
             intervals = np.arange(min_val, max_val+0.000001, step)
             
             color_ranges[stat] = [
-                (round(intervals[i[0]],2), round(intervals[i[0]+1],2))
+                (round(intervals[i[0]], 3), round(intervals[i[0]+1], 3))
                 for i,_ in np.ndenumerate(intervals[:len(colors_list)])
             ]
 
