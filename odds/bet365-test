@@ -1,0 +1,1360 @@
+<div id="betslipBar" class="Header" data-multichange="0">
+	<div id="betslipBarContent" data-nav="bs_goto">
+	    <div>
+            <span id="fallbackBetslipBarText">Bet Slip</span>
+		    <span id="SelectionCount">0</span>
+        </div>
+	</div>
+</div> 
+    
+<div id="Header" class="breadcrumbHeader V6">
+    <div id="HeaderInner">
+        <div id="HeaderBack" data-nav="back"><img src="grfx/V6/Misc/pixel.gif" class="backArrow"></div>
+        <div id="HeaderTitle">
+            <div id="breadcrumb">
+                <div>
+                    
+                    <span id="breadcrumbClassification" data-nav="Splash" data-cid="1">Soccer / </span>
+                    <span id="breadcrumbCompetition" class="" data-nav="" data-sportsKey="1-1-13-33577327-2-0-0-0-1-0-0-0-0-0-1-0-0-0-0-0-0-0-0">England Premier League</span> 
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    if (window.b365Mobile.coupon) {
+        b365Mobile.coupon.setBreadcrumbScroller();
+    }
+</script>
+    
+       
+    <div >
+            
+            
+            
+            <div id="LoadZone">
+                
+    <div class=" V6 PreMatch">
+        
+<div class="UnavailablePopup Hidden">
+    <div ID="UnavailablePopup_label">This selection is unavailable for this match</div>
+    <div class="UnavailablePopup_nib"></div>
+</div>
+        
+        
+        
+<script type="text/javascript">
+    // Instantiates and applies the correct 'NavScroller' to the 'tabs' based on the business rule.
+    var scrollerType,
+        scrollerTypes,
+        parentWidth,
+        existingPosition,
+        leftArrowWidth,
+        rightArrowWidth,
+        orientationCallBack,
+        tabStripID,
+        tabStripWrapperID,
+        tabStripEle,
+        tabStripWrapperEle,
+        tabStripLeftArrowEle,
+        tabStripRightArrowEle;
+
+    if (window.b365Mobile.NavScroller && window.mobileBusinessRules) {
+        // Enumerator for scroller types.
+        scrollerTypes = {
+            arrowScrolling: 1,
+            cssScrolling: 2,
+            iScrollScrolling: 3
+        };
+
+        
+            tabStripID = "#TabSliderCompetition";
+            tabStripWrapperID = "#TabSliderWrapperCompetition";
+        
+
+        // Grab the parent container width as we'll need this for all scroller types.
+        parentWidth = $(tabStripID).width();
+
+        tabStripEle = $(tabStripID)[0];
+
+        if (tabStripEle) {
+            tabStripWrapperEle = tabStripEle.getElementsByClassName("tabStripWrapper")[0];
+            tabStripLeftArrowEle = tabStripEle.getElementsByClassName("tabStripLeftArrow")[0];
+            tabStripRightArrowEle = tabStripEle.getElementsByClassName("tabStripRightArrow")[0];
+        }
+
+        // Ask the business rule which scroller type to apply based on the device/OS/browser/Versions.
+        scrollerType = window.mobileBusinessRules.deviceNavScrollerType();
+
+        // Depending on the type we need to do some setup (such as hiding the arrows).
+        switch (scrollerType) {
+
+            case scrollerTypes.cssScrolling:
+                // Standard CSS scrolling
+                // Ensure that the parent has the right width and left position, then hide the arrows.
+                $(tabStripWrapperEle).width(parentWidth).css('left', '0');
+                $(tabStripLeftArrowEle).addClass('Hidden');
+                $(tabStripRightArrowEle).addClass('Hidden');
+
+
+                orientationCallBack = function () {
+                    $(tabStripWrapperEle).width($(tabStripEle).width()).css('left', '0');
+                };
+
+
+                // If there was previously a scroller we'll try and get it's offset so we
+                // can reset the horizontal position.
+                if (window.mobileNavScroller) {
+                    try {
+                        existingPosition = window.mobileNavScroller.getCurrentOffset();
+                    } catch (e) {
+                        existingPosition = null;
+                    }
+                }
+
+                // Instantiate the scroller class.
+                window.mobileNavScroller = new window.b365Mobile.NavScroller(tabStripWrapperID, '.enhancedTab, .enhancedTabSelected', scrollerTypes.cssScrolling, orientationCallBack, 22, null, 20);
+                break;
+            case scrollerTypes.iScrollScrolling:
+                // iScroll Lite
+                $(tabStripWrapperEle).width(parentWidth).css('left', '0');
+
+                // Hide the arrows.
+                $(tabStripLeftArrowEle).addClass('Hidden');
+                $(tabStripRightArrowEle).addClass('Hidden');
+
+                orientationCallBack = function () {
+                    $(tabStripWrapperEle).width($(tabStripEle).width()).css('left', '0');
+                };
+
+                // If there was previously a scroller we'll try and get it's offset so we
+                // can reset the horizontal position.
+                if (window.mobileNavScroller) {
+                    try {
+                        existingPosition = window.mobileNavScroller.getCurrentOffset();
+                    } catch (e) {
+                        existingPosition = null;
+                    }
+                }
+
+                // Instantiate the scroller class.
+                window.mobileNavScroller = new window.b365Mobile.NavScroller(tabStripWrapperID, '.enhancedTab, .enhancedTabSelected', scrollerTypes.iScrollScrolling, orientationCallBack, 22);
+                break;
+            default:
+                // Arrow Fallback.
+
+                // Ensure that the container for the tabs has the correct width and that its left position is one pixel right of the left arrow.
+                leftArrowWidth = $(tabStripLeftArrowEle).width();
+                rightArrowWidth = $(tabStripRightArrowEle).width();
+                parentWidth -= ((leftArrowWidth + rightArrowWidth) + 15);
+                $(tabStripWrapperEle).width(parentWidth).css('left', '48px');
+
+                orientationCallBack = function () {
+                    var parentWidth = $(tabStripEle).width(),
+                        leftArrowWidth = $(tabStripLeftArrowEle).width(),
+                        rightArrowWidth = $(tabStripRightArrowEle).width();
+
+                    parentWidth -= ((leftArrowWidth + rightArrowWidth) + 15);
+                    $(tabStripWrapperEle).width(parentWidth).css('left', '48px');
+                };
+
+                // If there was previously a scroller we'll try and get it's offset so we
+                // can reset the horizontal position.
+                if (window.mobileNavScroller) {
+                    try {
+                        existingPosition = window.mobileNavScroller.getCurrentOffset();
+                    } catch (e) {
+                        existingPosition = null;
+                    }
+                }
+
+                // Instantiate the scroller class.
+                window.mobileNavScroller = new window.b365Mobile.NavScroller(tabStripWrapperID, '.enhancedTab, .enhancedTabSelected', scrollerTypes.arrowScrolling, orientationCallBack, 22, null, null, '#TabSliderLeftArrow', '#TabSliderRightArrow');
+
+                // Scroll to a sensible position for the selected element
+                var selectedTab = $('.enhancedTabSelected');
+                if (selectedTab.length > 0 && selectedTab.offset() != undefined) {
+                    window.mobileNavScroller.setCurrentOffset((selectedTab.offset().left + selectedTab.width) * -1);
+                }
+        }
+
+        // If we had a scroller before then reset its position.  This is for when we have auto refreshing coupons.
+        if (existingPosition) {
+            // Reset the horizontal position.
+            window.mobileNavScroller.setCurrentOffset(existingPosition);
+        }
+    }
+</script>
+<div id="TabSliderCompetition" class="tabStrip">
+    <div class="tabStripLeftArrow"></div>
+    <div id="TabSliderWrapperCompetition" class="tabStripWrapper">
+        
+                <div id="tab" class="enhancedTabSelected" data-nav="couponLink" data-target="" data-sportskey="1-1-13-33577327-2-1-0-0-1-0-0-4100-0-0-1-0-0-0-0-0-0-0-0">Matches</div>
+            
+                <div id="tab" class="enhancedTab" data-nav="couponLink" data-target="" data-sportskey="1-1-13-33577327-2-1-0-0-1-0-0-4100-0-0-1-0-0-0-0-0-0-2-0">Teams</div>
+            
+                <div id="tab" class="enhancedTab" data-nav="couponLink" data-target="" data-sportskey="1-172-1-36041244-2-1-0-0-1-0-0-4063-0-0-1-0-0-0-0-0-75-0-0">Outrights</div>
+            
+                <div id="tab" class="enhancedTab enhancedTabTogglable" data-nav="couponLink" data-target="" data-sportskey="1-1-13-33577327-2-1-0-0-1-0-0-4100-0-0-1-0-0-0-0-0-0-4-0">Table</div>
+            
+    </div>
+    <div class="tabStripRightArrow"></div>
+</div>
+
+
+        
+
+        
+
+<!-- C4.1 in-play enabled -->
+<script type="text/javascript">
+    if (window.prematchHandlers) {
+        window.prematchHandlers.addHandlers();
+    }
+</script>
+<div id="Coupon" class="C4 C4_1">
+	
+	
+	
+                <div class="liveAlertKey enhancedPod cc_65_5 forceopen" data-sportskey="1-1-13-33577327-2-0-0-0-1-0-0-4100-0-0-1-0-0-0-0-0-0-0-0" data-alertkey="">
+					<h1>
+						<em>
+							Full Time Result
+							
+								<button id="btnChangeMarket" class="changeMarketButton" data-nav="CouponMarketPopOut">
+									Change</button>
+							
+						</em>
+					</h1>
+					
+							
+								<div class="podHeaderRow">
+									<div class="wideLeftColumn">Sun 29 Apr</div>
+									
+											<div class="priceColumn"><em>1</em></div>
+										
+											<div class="priceColumn"><em>X</em></div>
+										
+											<div class="priceColumn"><em>2</em></div>
+										
+								</div>
+							
+
+							<div data-fixtureid='72969846' data-plbtid='40' class='podEventRow cc_17_6 ippg-Market ' data-nav='rw_spl_sc_1-1-8-72969846-3-0-0-0-1-0-0-0-0-0-1-0-0-0-0-0-0-0-0,MarketCount,1-1-8-72969846-3-0-0-0-1-0-0-0-0-0-1-0-0-0-0-0-0-0-0,False,1' >
+							<div class="wideLeftColumn hasStatsIcon">
+							    <div class="ippg-Market_GameDetail">
+							        <div class="ippg-Market_GameItem ">
+							            <div class="ippg-Market_CompetitorName">
+							                <span class="ippg-Market_Truncator">West Ham</span>
+							            </div>
+                                        <div class="ippg-Market_CompetitorScores">
+                                            <span class="ippg-PointNode"></span>
+                                        </div>
+							        </div>
+                                    <div class="ippg-Market_GameItem ">
+                                        <div class="ippg-Market_CompetitorName">
+                                            <span class="ippg-Market_Truncator">Man City</span>
+                                        </div><div class="ippg-Market_CompetitorScores">
+                                            <span class="ippg-PointNode"></span>
+                                        </div>
+                                    </div>
+                                    <div class="ippg-Market_MetaContainer ">									
+                                        <div class="ippg-Market_GameStartTime">14:15</div>							            
+                                        <div class="ippg-Market_GameInfo ">			  								
+										</div>
+                                        
+									        <div class="ippg-Market_MarketCount">124</div>
+								        
+                                        
+    <div id="FixtureIconsContainer">
+    <img src="/grfx/V6/Misc/pixel.gif" class="AudioIcon"/>
+    </div>
+	<div id="StatsIconContainer">
+    	<a class="icon-stats" target="_blank" data-nav="externalLink" href="http://www.stats.betradar.com/s4/?clientid=259&matchid=11830210&language=en-GB"></a>
+	</div>
+
+
+							        </div>
+							    </div>
+                            </div>
+							
+							
+                                        <div class="ippg-Market_Topic priceColumn" 
+                                              data-nav="pt=N#o=10/1#f=72969846#fp=1611908791#so=0#c=1#" 
+                                             data-inplaytopic=""
+                                             data-pgfpId="1611908791"
+                                             data-inplaymarkettopic="" 
+                                             data-inplayaltmarkettopic="" >
+                                            <span class="ippg-Market_Odds">10/1</span>
+                                        </div>
+									
+                                        <div class="ippg-Market_Topic priceColumn" 
+                                              data-nav="pt=N#o=5/1#f=72969846#fp=1611908792#so=0#c=1#" 
+                                             data-inplaytopic=""
+                                             data-pgfpId="1611908792"
+                                             data-inplaymarkettopic="" 
+                                             data-inplayaltmarkettopic="" >
+                                            <span class="ippg-Market_Odds">5/1</span>
+                                        </div>
+									
+                                        <div class="ippg-Market_Topic priceColumn" 
+                                              data-nav="pt=N#o=3/10#f=72969846#fp=1611908793#so=0#c=1#" 
+                                             data-inplaytopic=""
+                                             data-pgfpId="1611908793"
+                                             data-inplaymarkettopic="" 
+                                             data-inplayaltmarkettopic="" >
+                                            <span class="ippg-Market_Odds">3/10</span>
+                                        </div>
+									
+							</div> 
+                        
+						
+							
+
+							<div data-fixtureid='72969853' data-plbtid='40' class='podEventRow cc_4_4 ippg-Market ' data-nav='rw_spl_sc_1-1-8-72969853-3-0-0-0-1-0-0-0-0-0-1-0-0-0-0-0-0-0-0,MarketCount,1-1-8-72969853-3-0-0-0-1-0-0-0-0-0-1-0-0-0-0-0-0-0-0,False,1' >
+							<div class="wideLeftColumn hasStatsIcon">
+							    <div class="ippg-Market_GameDetail">
+							        <div class="ippg-Market_GameItem ">
+							            <div class="ippg-Market_CompetitorName">
+							                <span class="ippg-Market_Truncator">Man Utd</span>
+							            </div>
+                                        <div class="ippg-Market_CompetitorScores">
+                                            <span class="ippg-PointNode"></span>
+                                        </div>
+							        </div>
+                                    <div class="ippg-Market_GameItem ">
+                                        <div class="ippg-Market_CompetitorName">
+                                            <span class="ippg-Market_Truncator">Arsenal</span>
+                                        </div><div class="ippg-Market_CompetitorScores">
+                                            <span class="ippg-PointNode"></span>
+                                        </div>
+                                    </div>
+                                    <div class="ippg-Market_MetaContainer ">									
+                                        <div class="ippg-Market_GameStartTime">16:30</div>							            
+                                        <div class="ippg-Market_GameInfo ">			  								
+										</div>
+                                        
+									        <div class="ippg-Market_MarketCount">124</div>
+								        
+                                        
+    <div id="FixtureIconsContainer">
+    <img src="/grfx/V6/Misc/pixel.gif" class="AudioIcon"/>
+    </div>
+	<div id="StatsIconContainer">
+    	<a class="icon-stats" target="_blank" data-nav="externalLink" href="http://www.stats.betradar.com/s4/?clientid=259&matchid=11830182&language=en-GB"></a>
+	</div>
+
+
+							        </div>
+							    </div>
+                            </div>
+							
+							
+                                        <div class="ippg-Market_Topic priceColumn" 
+                                              data-nav="pt=N#o=2/5#f=72969853#fp=1611908838#so=0#c=1#" 
+                                             data-inplaytopic=""
+                                             data-pgfpId="1611908838"
+                                             data-inplaymarkettopic="" 
+                                             data-inplayaltmarkettopic="" >
+                                            <span class="ippg-Market_Odds">2/5</span>
+                                        </div>
+									
+                                        <div class="ippg-Market_Topic priceColumn" 
+                                              data-nav="pt=N#o=17/4#f=72969853#fp=1611908840#so=0#c=1#" 
+                                             data-inplaytopic=""
+                                             data-pgfpId="1611908840"
+                                             data-inplaymarkettopic="" 
+                                             data-inplayaltmarkettopic="" >
+                                            <span class="ippg-Market_Odds">17/4</span>
+                                        </div>
+									
+                                        <div class="ippg-Market_Topic priceColumn" 
+                                              data-nav="pt=N#o=7/1#f=72969853#fp=1611908842#so=0#c=1#" 
+                                             data-inplaytopic=""
+                                             data-pgfpId="1611908842"
+                                             data-inplaymarkettopic="" 
+                                             data-inplayaltmarkettopic="" >
+                                            <span class="ippg-Market_Odds">7/1</span>
+                                        </div>
+									
+							</div> 
+                        
+						
+							
+								<div class="podHeaderRow">
+									<div class="wideLeftColumn">Mon 30 Apr</div>
+									
+											<div class="priceColumn"><em>1</em></div>
+										
+											<div class="priceColumn"><em>X</em></div>
+										
+											<div class="priceColumn"><em>2</em></div>
+										
+								</div>
+							
+
+							<div data-fixtureid='72969857' data-plbtid='40' class='podEventRow cc_65_8 ippg-Market ' data-nav='rw_spl_sc_1-1-8-72969857-3-0-0-0-1-0-0-0-0-0-1-0-0-0-0-0-0-0-0,MarketCount,1-1-8-72969857-3-0-0-0-1-0-0-0-0-0-1-0-0-0-0-0-0-0-0,False,1' >
+							<div class="wideLeftColumn hasStatsIcon">
+							    <div class="ippg-Market_GameDetail">
+							        <div class="ippg-Market_GameItem ">
+							            <div class="ippg-Market_CompetitorName">
+							                <span class="ippg-Market_Truncator">Tottenham</span>
+							            </div>
+                                        <div class="ippg-Market_CompetitorScores">
+                                            <span class="ippg-PointNode"></span>
+                                        </div>
+							        </div>
+                                    <div class="ippg-Market_GameItem ">
+                                        <div class="ippg-Market_CompetitorName">
+                                            <span class="ippg-Market_Truncator">Watford</span>
+                                        </div><div class="ippg-Market_CompetitorScores">
+                                            <span class="ippg-PointNode"></span>
+                                        </div>
+                                    </div>
+                                    <div class="ippg-Market_MetaContainer ">									
+                                        <div class="ippg-Market_GameStartTime">20:00</div>							            
+                                        <div class="ippg-Market_GameInfo ">			  								
+										</div>
+                                        
+									        <div class="ippg-Market_MarketCount">126</div>
+								        
+                                        
+    <div id="FixtureIconsContainer">
+    <img src="/grfx/V6/Misc/pixel.gif" class="AudioIcon"/>
+    </div>
+	<div id="StatsIconContainer">
+    	<a class="icon-stats" target="_blank" data-nav="externalLink" href="http://www.stats.betradar.com/s4/?clientid=259&matchid=11830534&language=en-GB"></a>
+	</div>
+
+
+							        </div>
+							    </div>
+                            </div>
+							
+							
+                                        <div class="ippg-Market_Topic priceColumn" 
+                                              data-nav="pt=N#o=1/6#f=72969857#fp=1611908944#so=0#c=1#" 
+                                             data-inplaytopic=""
+                                             data-pgfpId="1611908944"
+                                             data-inplaymarkettopic="" 
+                                             data-inplayaltmarkettopic="" >
+                                            <span class="ippg-Market_Odds">1/6</span>
+                                        </div>
+									
+                                        <div class="ippg-Market_Topic priceColumn" 
+                                              data-nav="pt=N#o=15/2#f=72969857#fp=1611908946#so=0#c=1#" 
+                                             data-inplaytopic=""
+                                             data-pgfpId="1611908946"
+                                             data-inplaymarkettopic="" 
+                                             data-inplayaltmarkettopic="" >
+                                            <span class="ippg-Market_Odds">15/2</span>
+                                        </div>
+									
+                                        <div class="ippg-Market_Topic priceColumn" 
+                                              data-nav="pt=N#o=20/1#f=72969857#fp=1611908948#so=0#c=1#" 
+                                             data-inplaytopic=""
+                                             data-pgfpId="1611908948"
+                                             data-inplaymarkettopic="" 
+                                             data-inplayaltmarkettopic="" >
+                                            <span class="ippg-Market_Odds">20/1</span>
+                                        </div>
+									
+							</div> 
+                        
+						
+							
+								<div class="podHeaderRow">
+									<div class="wideLeftColumn">Fri 04 May</div>
+									
+											<div class="priceColumn"><em>1</em></div>
+										
+											<div class="priceColumn"><em>X</em></div>
+										
+											<div class="priceColumn"><em>2</em></div>
+										
+								</div>
+							
+
+							<div data-fixtureid='73164660' data-plbtid='40' class='podEventRow cc_17_6 ippg-Market ' data-nav='rw_spl_sc_1-1-8-73164660-3-0-0-0-1-0-0-0-0-0-1-0-0-0-0-0-0-0-0,MarketCount,1-1-8-73164660-3-0-0-0-1-0-0-0-0-0-1-0-0-0-0-0-0-0-0,False,1' >
+							<div class="wideLeftColumn hasStatsIcon">
+							    <div class="ippg-Market_GameDetail">
+							        <div class="ippg-Market_GameItem ">
+							            <div class="ippg-Market_CompetitorName">
+							                <span class="ippg-Market_Truncator">Brighton</span>
+							            </div>
+                                        <div class="ippg-Market_CompetitorScores">
+                                            <span class="ippg-PointNode"></span>
+                                        </div>
+							        </div>
+                                    <div class="ippg-Market_GameItem ">
+                                        <div class="ippg-Market_CompetitorName">
+                                            <span class="ippg-Market_Truncator">Man Utd</span>
+                                        </div><div class="ippg-Market_CompetitorScores">
+                                            <span class="ippg-PointNode"></span>
+                                        </div>
+                                    </div>
+                                    <div class="ippg-Market_MetaContainer ">									
+                                        <div class="ippg-Market_GameStartTime">20:00</div>							            
+                                        <div class="ippg-Market_GameInfo ">			  								
+										</div>
+                                        
+									        <div class="ippg-Market_MarketCount">72</div>
+								        
+                                        
+    <div id="FixtureIconsContainer">
+    
+    </div>
+	<div id="StatsIconContainer">
+    	<a class="icon-stats" target="_blank" data-nav="externalLink" href="http://www.stats.betradar.com/s4/?clientid=259&matchid=11830584&language=en-GB"></a>
+	</div>
+
+
+							        </div>
+							    </div>
+                            </div>
+							
+							
+                                        <div class="ippg-Market_Topic priceColumn" 
+                                              data-nav="pt=N#o=9/2#f=73164660#fp=1619655300#so=0#c=1#" 
+                                             data-inplaytopic=""
+                                             data-pgfpId="1619655300"
+                                             data-inplaymarkettopic="" 
+                                             data-inplayaltmarkettopic="" >
+                                            <span class="ippg-Market_Odds">9/2</span>
+                                        </div>
+									
+                                        <div class="ippg-Market_Topic priceColumn" 
+                                              data-nav="pt=N#o=3/1#f=73164660#fp=1619655301#so=0#c=1#" 
+                                             data-inplaytopic=""
+                                             data-pgfpId="1619655301"
+                                             data-inplaymarkettopic="" 
+                                             data-inplayaltmarkettopic="" >
+                                            <span class="ippg-Market_Odds">3/1</span>
+                                        </div>
+									
+                                        <div class="ippg-Market_Topic priceColumn" 
+                                              data-nav="pt=N#o=4/7#f=73164660#fp=1619655302#so=0#c=1#" 
+                                             data-inplaytopic=""
+                                             data-pgfpId="1619655302"
+                                             data-inplaymarkettopic="" 
+                                             data-inplayaltmarkettopic="" >
+                                            <span class="ippg-Market_Odds">4/7</span>
+                                        </div>
+									
+							</div> 
+                        
+						
+							
+								<div class="podHeaderRow">
+									<div class="wideLeftColumn">Sat 05 May</div>
+									
+											<div class="priceColumn"><em>1</em></div>
+										
+											<div class="priceColumn"><em>X</em></div>
+										
+											<div class="priceColumn"><em>2</em></div>
+										
+								</div>
+							
+
+							<div data-fixtureid='73164662' data-plbtid='40' class='podEventRow cc_34_8 ippg-Market ' data-nav='rw_spl_sc_1-1-8-73164662-3-0-0-0-1-0-0-0-0-0-1-0-0-0-0-0-0-0-0,MarketCount,1-1-8-73164662-3-0-0-0-1-0-0-0-0-0-1-0-0-0-0-0-0-0-0,False,1' >
+							<div class="wideLeftColumn hasStatsIcon">
+							    <div class="ippg-Market_GameDetail">
+							        <div class="ippg-Market_GameItem ">
+							            <div class="ippg-Market_CompetitorName">
+							                <span class="ippg-Market_Truncator">Stoke</span>
+							            </div>
+                                        <div class="ippg-Market_CompetitorScores">
+                                            <span class="ippg-PointNode"></span>
+                                        </div>
+							        </div>
+                                    <div class="ippg-Market_GameItem ">
+                                        <div class="ippg-Market_CompetitorName">
+                                            <span class="ippg-Market_Truncator">Crystal Palace</span>
+                                        </div><div class="ippg-Market_CompetitorScores">
+                                            <span class="ippg-PointNode"></span>
+                                        </div>
+                                    </div>
+                                    <div class="ippg-Market_MetaContainer ">									
+                                        <div class="ippg-Market_GameStartTime">12:30</div>							            
+                                        <div class="ippg-Market_GameInfo ">			  								
+										</div>
+                                        
+									        <div class="ippg-Market_MarketCount">72</div>
+								        
+                                        
+    <div id="FixtureIconsContainer">
+    
+    </div>
+	<div id="StatsIconContainer">
+    	<a class="icon-stats" target="_blank" data-nav="externalLink" href="http://www.stats.betradar.com/s4/?clientid=259&matchid=11830016&language=en-GB"></a>
+	</div>
+
+
+							        </div>
+							    </div>
+                            </div>
+							
+							
+                                        <div class="ippg-Market_Topic priceColumn" 
+                                              data-nav="pt=N#o=6/4#f=73164662#fp=1619655313#so=0#c=1#" 
+                                             data-inplaytopic=""
+                                             data-pgfpId="1619655313"
+                                             data-inplaymarkettopic="" 
+                                             data-inplayaltmarkettopic="" >
+                                            <span class="ippg-Market_Odds">6/4</span>
+                                        </div>
+									
+                                        <div class="ippg-Market_Topic priceColumn" 
+                                              data-nav="pt=N#o=11/5#f=73164662#fp=1619655314#so=0#c=1#" 
+                                             data-inplaytopic=""
+                                             data-pgfpId="1619655314"
+                                             data-inplaymarkettopic="" 
+                                             data-inplayaltmarkettopic="" >
+                                            <span class="ippg-Market_Odds">11/5</span>
+                                        </div>
+									
+                                        <div class="ippg-Market_Topic priceColumn" 
+                                              data-nav="pt=N#o=15/8#f=73164662#fp=1619655315#so=0#c=1#" 
+                                             data-inplaytopic=""
+                                             data-pgfpId="1619655315"
+                                             data-inplaymarkettopic="" 
+                                             data-inplayaltmarkettopic="" >
+                                            <span class="ippg-Market_Odds">15/8</span>
+                                        </div>
+									
+							</div> 
+                        
+						
+							
+
+							<div data-fixtureid='73164664' data-plbtid='40' class='podEventRow cc_12_1 ippg-Market ' data-nav='rw_spl_sc_1-1-8-73164664-3-0-0-0-1-0-0-0-0-0-1-0-0-0-0-0-0-0-0,MarketCount,1-1-8-73164664-3-0-0-0-1-0-0-0-0-0-1-0-0-0-0-0-0-0-0,False,1' >
+							<div class="wideLeftColumn hasStatsIcon">
+							    <div class="ippg-Market_GameDetail">
+							        <div class="ippg-Market_GameItem ">
+							            <div class="ippg-Market_CompetitorName">
+							                <span class="ippg-Market_Truncator">Bournemouth</span>
+							            </div>
+                                        <div class="ippg-Market_CompetitorScores">
+                                            <span class="ippg-PointNode"></span>
+                                        </div>
+							        </div>
+                                    <div class="ippg-Market_GameItem ">
+                                        <div class="ippg-Market_CompetitorName">
+                                            <span class="ippg-Market_Truncator">Swansea</span>
+                                        </div><div class="ippg-Market_CompetitorScores">
+                                            <span class="ippg-PointNode"></span>
+                                        </div>
+                                    </div>
+                                    <div class="ippg-Market_MetaContainer ">									
+                                        <div class="ippg-Market_GameStartTime">15:00</div>							            
+                                        <div class="ippg-Market_GameInfo ">			  								
+										</div>
+                                        
+									        <div class="ippg-Market_MarketCount">72</div>
+								        
+                                        
+    <div id="FixtureIconsContainer">
+    
+    </div>
+	<div id="StatsIconContainer">
+    	<a class="icon-stats" target="_blank" data-nav="externalLink" href="http://www.stats.betradar.com/s4/?clientid=259&matchid=11830642&language=en-GB"></a>
+	</div>
+
+
+							        </div>
+							    </div>
+                            </div>
+							
+							
+                                        <div class="ippg-Market_Topic priceColumn" 
+                                              data-nav="pt=N#o=11/10#f=73164664#fp=1619655326#so=0#c=1#" 
+                                             data-inplaytopic=""
+                                             data-pgfpId="1619655326"
+                                             data-inplaymarkettopic="" 
+                                             data-inplayaltmarkettopic="" >
+                                            <span class="ippg-Market_Odds">11/10</span>
+                                        </div>
+									
+                                        <div class="ippg-Market_Topic priceColumn" 
+                                              data-nav="pt=N#o=23/10#f=73164664#fp=1619655327#so=0#c=1#" 
+                                             data-inplaytopic=""
+                                             data-pgfpId="1619655327"
+                                             data-inplaymarkettopic="" 
+                                             data-inplayaltmarkettopic="" >
+                                            <span class="ippg-Market_Odds">23/10</span>
+                                        </div>
+									
+                                        <div class="ippg-Market_Topic priceColumn" 
+                                              data-nav="pt=N#o=5/2#f=73164664#fp=1619655328#so=0#c=1#" 
+                                             data-inplaytopic=""
+                                             data-pgfpId="1619655328"
+                                             data-inplaymarkettopic="" 
+                                             data-inplayaltmarkettopic="" >
+                                            <span class="ippg-Market_Odds">5/2</span>
+                                        </div>
+									
+							</div> 
+                        
+						
+							
+
+							<div data-fixtureid='73164666' data-plbtid='40' class='podEventRow cc_17_3 ippg-Market ' data-nav='rw_spl_sc_1-1-8-73164666-3-0-0-0-1-0-0-0-0-0-1-0-0-0-0-0-0-0-0,MarketCount,1-1-8-73164666-3-0-0-0-1-0-0-0-0-0-1-0-0-0-0-0-0-0-0,False,1' >
+							<div class="wideLeftColumn hasStatsIcon">
+							    <div class="ippg-Market_GameDetail">
+							        <div class="ippg-Market_GameItem ">
+							            <div class="ippg-Market_CompetitorName">
+							                <span class="ippg-Market_Truncator">Leicester</span>
+							            </div>
+                                        <div class="ippg-Market_CompetitorScores">
+                                            <span class="ippg-PointNode"></span>
+                                        </div>
+							        </div>
+                                    <div class="ippg-Market_GameItem ">
+                                        <div class="ippg-Market_CompetitorName">
+                                            <span class="ippg-Market_Truncator">West Ham</span>
+                                        </div><div class="ippg-Market_CompetitorScores">
+                                            <span class="ippg-PointNode"></span>
+                                        </div>
+                                    </div>
+                                    <div class="ippg-Market_MetaContainer ">									
+                                        <div class="ippg-Market_GameStartTime">15:00</div>							            
+                                        <div class="ippg-Market_GameInfo ">			  								
+										</div>
+                                        
+									        <div class="ippg-Market_MarketCount">72</div>
+								        
+                                        
+    <div id="FixtureIconsContainer">
+    
+    </div>
+	<div id="StatsIconContainer">
+    	<a class="icon-stats" target="_blank" data-nav="externalLink" href="http://www.stats.betradar.com/s4/?clientid=259&matchid=11830436&language=en-GB"></a>
+	</div>
+
+
+							        </div>
+							    </div>
+                            </div>
+							
+							
+                                        <div class="ippg-Market_Topic priceColumn" 
+                                              data-nav="pt=N#o=11/10#f=73164666#fp=1619655339#so=0#c=1#" 
+                                             data-inplaytopic=""
+                                             data-pgfpId="1619655339"
+                                             data-inplaymarkettopic="" 
+                                             data-inplayaltmarkettopic="" >
+                                            <span class="ippg-Market_Odds">11/10</span>
+                                        </div>
+									
+                                        <div class="ippg-Market_Topic priceColumn" 
+                                              data-nav="pt=N#o=5/2#f=73164666#fp=1619655340#so=0#c=1#" 
+                                             data-inplaytopic=""
+                                             data-pgfpId="1619655340"
+                                             data-inplaymarkettopic="" 
+                                             data-inplayaltmarkettopic="" >
+                                            <span class="ippg-Market_Odds">5/2</span>
+                                        </div>
+									
+                                        <div class="ippg-Market_Topic priceColumn" 
+                                              data-nav="pt=N#o=12/5#f=73164666#fp=1619655341#so=0#c=1#" 
+                                             data-inplaytopic=""
+                                             data-pgfpId="1619655341"
+                                             data-inplaymarkettopic="" 
+                                             data-inplayaltmarkettopic="" >
+                                            <span class="ippg-Market_Odds">12/5</span>
+                                        </div>
+									
+							</div> 
+                        
+						
+							
+
+							<div data-fixtureid='73164668' data-plbtid='40' class='podEventRow cc_34_5 ippg-Market ' data-nav='rw_spl_sc_1-1-8-73164668-3-0-0-0-1-0-0-0-0-0-1-0-0-0-0-0-0-0-0,MarketCount,1-1-8-73164668-3-0-0-0-1-0-0-0-0-0-1-0-0-0-0-0-0-0-0,False,1' >
+							<div class="wideLeftColumn hasStatsIcon">
+							    <div class="ippg-Market_GameDetail">
+							        <div class="ippg-Market_GameItem ">
+							            <div class="ippg-Market_CompetitorName">
+							                <span class="ippg-Market_Truncator">Watford</span>
+							            </div>
+                                        <div class="ippg-Market_CompetitorScores">
+                                            <span class="ippg-PointNode"></span>
+                                        </div>
+							        </div>
+                                    <div class="ippg-Market_GameItem ">
+                                        <div class="ippg-Market_CompetitorName">
+                                            <span class="ippg-Market_Truncator">Newcastle</span>
+                                        </div><div class="ippg-Market_CompetitorScores">
+                                            <span class="ippg-PointNode"></span>
+                                        </div>
+                                    </div>
+                                    <div class="ippg-Market_MetaContainer ">									
+                                        <div class="ippg-Market_GameStartTime">15:00</div>							            
+                                        <div class="ippg-Market_GameInfo ">			  								
+										</div>
+                                        
+									        <div class="ippg-Market_MarketCount">72</div>
+								        
+                                        
+    <div id="FixtureIconsContainer">
+    
+    </div>
+	<div id="StatsIconContainer">
+    	<a class="icon-stats" target="_blank" data-nav="externalLink" href="http://www.stats.betradar.com/s4/?clientid=259&matchid=11830672&language=en-GB"></a>
+	</div>
+
+
+							        </div>
+							    </div>
+                            </div>
+							
+							
+                                        <div class="ippg-Market_Topic priceColumn" 
+                                              data-nav="pt=N#o=7/5#f=73164668#fp=1619655354#so=0#c=1#" 
+                                             data-inplaytopic=""
+                                             data-pgfpId="1619655354"
+                                             data-inplaymarkettopic="" 
+                                             data-inplayaltmarkettopic="" >
+                                            <span class="ippg-Market_Odds">7/5</span>
+                                        </div>
+									
+                                        <div class="ippg-Market_Topic priceColumn" 
+                                              data-nav="pt=N#o=9/4#f=73164668#fp=1619655355#so=0#c=1#" 
+                                             data-inplaytopic=""
+                                             data-pgfpId="1619655355"
+                                             data-inplaymarkettopic="" 
+                                             data-inplayaltmarkettopic="" >
+                                            <span class="ippg-Market_Odds">9/4</span>
+                                        </div>
+									
+                                        <div class="ippg-Market_Topic priceColumn" 
+                                              data-nav="pt=N#o=19/10#f=73164668#fp=1619655356#so=0#c=1#" 
+                                             data-inplaytopic=""
+                                             data-pgfpId="1619655356"
+                                             data-inplaymarkettopic="" 
+                                             data-inplayaltmarkettopic="" >
+                                            <span class="ippg-Market_Odds">19/10</span>
+                                        </div>
+									
+							</div> 
+                        
+						
+							
+
+							<div data-fixtureid='73164670' data-plbtid='40' class='podEventRow cc_12_7 ippg-Market ' data-nav='rw_spl_sc_1-1-8-73164670-3-0-0-0-1-0-0-0-0-0-1-0-0-0-0-0-0-0-0,MarketCount,1-1-8-73164670-3-0-0-0-1-0-0-0-0-0-1-0-0-0-0-0-0-0-0,False,1' >
+							<div class="wideLeftColumn hasStatsIcon">
+							    <div class="ippg-Market_GameDetail">
+							        <div class="ippg-Market_GameItem ">
+							            <div class="ippg-Market_CompetitorName">
+							                <span class="ippg-Market_Truncator">West Brom</span>
+							            </div>
+                                        <div class="ippg-Market_CompetitorScores">
+                                            <span class="ippg-PointNode"></span>
+                                        </div>
+							        </div>
+                                    <div class="ippg-Market_GameItem ">
+                                        <div class="ippg-Market_CompetitorName">
+                                            <span class="ippg-Market_Truncator">Tottenham</span>
+                                        </div><div class="ippg-Market_CompetitorScores">
+                                            <span class="ippg-PointNode"></span>
+                                        </div>
+                                    </div>
+                                    <div class="ippg-Market_MetaContainer ">									
+                                        <div class="ippg-Market_GameStartTime">15:00</div>							            
+                                        <div class="ippg-Market_GameInfo ">			  								
+										</div>
+                                        
+									        <div class="ippg-Market_MarketCount">72</div>
+								        
+                                        
+    <div id="FixtureIconsContainer">
+    
+    </div>
+	<div id="StatsIconContainer">
+    	<a class="icon-stats" target="_blank" data-nav="externalLink" href="http://www.stats.betradar.com/s4/?clientid=259&matchid=11830714&language=en-GB"></a>
+	</div>
+
+
+							        </div>
+							    </div>
+                            </div>
+							
+							
+                                        <div class="ippg-Market_Topic priceColumn" 
+                                              data-nav="pt=N#o=15/2#f=73164670#fp=1619655379#so=0#c=1#" 
+                                             data-inplaytopic=""
+                                             data-pgfpId="1619655379"
+                                             data-inplaymarkettopic="" 
+                                             data-inplayaltmarkettopic="" >
+                                            <span class="ippg-Market_Odds">15/2</span>
+                                        </div>
+									
+                                        <div class="ippg-Market_Topic priceColumn" 
+                                              data-nav="pt=N#o=15/4#f=73164670#fp=1619655380#so=0#c=1#" 
+                                             data-inplaytopic=""
+                                             data-pgfpId="1619655380"
+                                             data-inplaymarkettopic="" 
+                                             data-inplayaltmarkettopic="" >
+                                            <span class="ippg-Market_Odds">15/4</span>
+                                        </div>
+									
+                                        <div class="ippg-Market_Topic priceColumn" 
+                                              data-nav="pt=N#o=4/11#f=73164670#fp=1619655381#so=0#c=1#" 
+                                             data-inplaytopic=""
+                                             data-pgfpId="1619655381"
+                                             data-inplaymarkettopic="" 
+                                             data-inplayaltmarkettopic="" >
+                                            <span class="ippg-Market_Odds">4/11</span>
+                                        </div>
+									
+							</div> 
+                        
+						
+							
+
+							<div data-fixtureid='73164673' data-plbtid='40' class='podEventRow cc_4_1 ippg-Market ' data-nav='rw_spl_sc_1-1-8-73164673-3-0-0-0-1-0-0-0-0-0-1-0-0-0-0-0-0-0-0,MarketCount,1-1-8-73164673-3-0-0-0-1-0-0-0-0-0-1-0-0-0-0-0-0-0-0,False,1' >
+							<div class="wideLeftColumn hasStatsIcon">
+							    <div class="ippg-Market_GameDetail">
+							        <div class="ippg-Market_GameItem ">
+							            <div class="ippg-Market_CompetitorName">
+							                <span class="ippg-Market_Truncator">Everton</span>
+							            </div>
+                                        <div class="ippg-Market_CompetitorScores">
+                                            <span class="ippg-PointNode"></span>
+                                        </div>
+							        </div>
+                                    <div class="ippg-Market_GameItem ">
+                                        <div class="ippg-Market_CompetitorName">
+                                            <span class="ippg-Market_Truncator">Southampton</span>
+                                        </div><div class="ippg-Market_CompetitorScores">
+                                            <span class="ippg-PointNode"></span>
+                                        </div>
+                                    </div>
+                                    <div class="ippg-Market_MetaContainer ">									
+                                        <div class="ippg-Market_GameStartTime">17:30</div>							            
+                                        <div class="ippg-Market_GameInfo ">			  								
+										</div>
+                                        
+									        <div class="ippg-Market_MarketCount">64</div>
+								        
+                                        
+    <div id="FixtureIconsContainer">
+    
+    </div>
+	<div id="StatsIconContainer">
+    	<a class="icon-stats" target="_blank" data-nav="externalLink" href="http://www.stats.betradar.com/s4/?clientid=259&matchid=11830256&language=en-GB"></a>
+	</div>
+
+
+							        </div>
+							    </div>
+                            </div>
+							
+							
+                                        <div class="ippg-Market_Topic priceColumn" 
+                                              data-nav="pt=N#o=29/20#f=73164673#fp=1619655419#so=0#c=1#" 
+                                             data-inplaytopic=""
+                                             data-pgfpId="1619655419"
+                                             data-inplaymarkettopic="" 
+                                             data-inplayaltmarkettopic="" >
+                                            <span class="ippg-Market_Odds">29/20</span>
+                                        </div>
+									
+                                        <div class="ippg-Market_Topic priceColumn" 
+                                              data-nav="pt=N#o=23/10#f=73164673#fp=1619655422#so=0#c=1#" 
+                                             data-inplaytopic=""
+                                             data-pgfpId="1619655422"
+                                             data-inplaymarkettopic="" 
+                                             data-inplayaltmarkettopic="" >
+                                            <span class="ippg-Market_Odds">23/10</span>
+                                        </div>
+									
+                                        <div class="ippg-Market_Topic priceColumn" 
+                                              data-nav="pt=N#o=9/5#f=73164673#fp=1619655424#so=0#c=1#" 
+                                             data-inplaytopic=""
+                                             data-pgfpId="1619655424"
+                                             data-inplaymarkettopic="" 
+                                             data-inplayaltmarkettopic="" >
+                                            <span class="ippg-Market_Odds">9/5</span>
+                                        </div>
+									
+							</div> 
+                        
+						
+							
+								<div class="podHeaderRow">
+									<div class="wideLeftColumn">Sun 06 May</div>
+									
+											<div class="priceColumn"><em>1</em></div>
+										
+											<div class="priceColumn"><em>X</em></div>
+										
+											<div class="priceColumn"><em>2</em></div>
+										
+								</div>
+							
+
+							<div data-fixtureid='73164675' data-plbtid='40' class='podEventRow cc_76_3 ippg-Market ' data-nav='rw_spl_sc_1-1-8-73164675-3-0-0-0-1-0-0-0-0-0-1-0-0-0-0-0-0-0-0,MarketCount,1-1-8-73164675-3-0-0-0-1-0-0-0-0-0-1-0-0-0-0-0-0-0-0,False,1' >
+							<div class="wideLeftColumn hasStatsIcon">
+							    <div class="ippg-Market_GameDetail">
+							        <div class="ippg-Market_GameItem ">
+							            <div class="ippg-Market_CompetitorName">
+							                <span class="ippg-Market_Truncator">Man City</span>
+							            </div>
+                                        <div class="ippg-Market_CompetitorScores">
+                                            <span class="ippg-PointNode"></span>
+                                        </div>
+							        </div>
+                                    <div class="ippg-Market_GameItem ">
+                                        <div class="ippg-Market_CompetitorName">
+                                            <span class="ippg-Market_Truncator">Huddersfield</span>
+                                        </div><div class="ippg-Market_CompetitorScores">
+                                            <span class="ippg-PointNode"></span>
+                                        </div>
+                                    </div>
+                                    <div class="ippg-Market_MetaContainer ">									
+                                        <div class="ippg-Market_GameStartTime">13:30</div>							            
+                                        <div class="ippg-Market_GameInfo ">			  								
+										</div>
+                                        
+									        <div class="ippg-Market_MarketCount">72</div>
+								        
+                                        
+    <div id="FixtureIconsContainer">
+    
+    </div>
+	<div id="StatsIconContainer">
+    	<a class="icon-stats" target="_blank" data-nav="externalLink" href="http://www.stats.betradar.com/s4/?clientid=259&matchid=11830164&language=en-GB"></a>
+	</div>
+
+
+							        </div>
+							    </div>
+                            </div>
+							
+							
+                                        <div class="ippg-Market_Topic priceColumn" 
+                                              data-nav="pt=N#o=1/10#f=73164675#fp=1619655519#so=0#c=1#" 
+                                             data-inplaytopic=""
+                                             data-pgfpId="1619655519"
+                                             data-inplaymarkettopic="" 
+                                             data-inplayaltmarkettopic="" >
+                                            <span class="ippg-Market_Odds">1/10</span>
+                                        </div>
+									
+                                        <div class="ippg-Market_Topic priceColumn" 
+                                              data-nav="pt=N#o=8/1#f=73164675#fp=1619655521#so=0#c=1#" 
+                                             data-inplaytopic=""
+                                             data-pgfpId="1619655521"
+                                             data-inplaymarkettopic="" 
+                                             data-inplayaltmarkettopic="" >
+                                            <span class="ippg-Market_Odds">8/1</span>
+                                        </div>
+									
+                                        <div class="ippg-Market_Topic priceColumn" 
+                                              data-nav="pt=N#o=20/1#f=73164675#fp=1619655523#so=0#c=1#" 
+                                             data-inplaytopic=""
+                                             data-pgfpId="1619655523"
+                                             data-inplaymarkettopic="" 
+                                             data-inplayaltmarkettopic="" >
+                                            <span class="ippg-Market_Odds">20/1</span>
+                                        </div>
+									
+							</div> 
+                        
+						
+							
+
+							<div data-fixtureid='73164677' data-plbtid='40' class='podEventRow cc_65_5 ippg-Market ' data-nav='rw_spl_sc_1-1-8-73164677-3-0-0-0-1-0-0-0-0-0-1-0-0-0-0-0-0-0-0,MarketCount,1-1-8-73164677-3-0-0-0-1-0-0-0-0-0-1-0-0-0-0-0-0-0-0,False,1' >
+							<div class="wideLeftColumn hasStatsIcon">
+							    <div class="ippg-Market_GameDetail">
+							        <div class="ippg-Market_GameItem ">
+							            <div class="ippg-Market_CompetitorName">
+							                <span class="ippg-Market_Truncator">Arsenal</span>
+							            </div>
+                                        <div class="ippg-Market_CompetitorScores">
+                                            <span class="ippg-PointNode"></span>
+                                        </div>
+							        </div>
+                                    <div class="ippg-Market_GameItem ">
+                                        <div class="ippg-Market_CompetitorName">
+                                            <span class="ippg-Market_Truncator">Burnley</span>
+                                        </div><div class="ippg-Market_CompetitorScores">
+                                            <span class="ippg-PointNode"></span>
+                                        </div>
+                                    </div>
+                                    <div class="ippg-Market_MetaContainer ">									
+                                        <div class="ippg-Market_GameStartTime">16:30</div>							            
+                                        <div class="ippg-Market_GameInfo ">			  								
+										</div>
+                                        
+									        <div class="ippg-Market_MarketCount">72</div>
+								        
+                                        
+    <div id="FixtureIconsContainer">
+    <img src="/grfx/V6/Misc/pixel.gif" class="AudioIcon"/>
+    </div>
+	<div id="StatsIconContainer">
+    	<a class="icon-stats" target="_blank" data-nav="externalLink" href="http://www.stats.betradar.com/s4/?clientid=259&matchid=11830356&language=en-GB"></a>
+	</div>
+
+
+							        </div>
+							    </div>
+                            </div>
+							
+							
+                                        <div class="ippg-Market_Topic priceColumn" 
+                                              data-nav="pt=N#o=1/2#f=73164677#fp=1619655566#so=0#c=1#" 
+                                             data-inplaytopic=""
+                                             data-pgfpId="1619655566"
+                                             data-inplaymarkettopic="" 
+                                             data-inplayaltmarkettopic="" >
+                                            <span class="ippg-Market_Odds">1/2</span>
+                                        </div>
+									
+                                        <div class="ippg-Market_Topic priceColumn" 
+                                              data-nav="pt=N#o=3/1#f=73164677#fp=1619655567#so=0#c=1#" 
+                                             data-inplaytopic=""
+                                             data-pgfpId="1619655567"
+                                             data-inplaymarkettopic="" 
+                                             data-inplayaltmarkettopic="" >
+                                            <span class="ippg-Market_Odds">3/1</span>
+                                        </div>
+									
+                                        <div class="ippg-Market_Topic priceColumn" 
+                                              data-nav="pt=N#o=6/1#f=73164677#fp=1619655568#so=0#c=1#" 
+                                             data-inplaytopic=""
+                                             data-pgfpId="1619655568"
+                                             data-inplaymarkettopic="" 
+                                             data-inplayaltmarkettopic="" >
+                                            <span class="ippg-Market_Odds">6/1</span>
+                                        </div>
+									
+							</div> 
+                        
+						
+							
+
+							<div data-fixtureid='73164680' data-plbtid='40' class='podEventRow cc_34_8 ippg-Market ' data-nav='rw_spl_sc_1-1-8-73164680-3-0-0-0-1-0-0-0-0-0-1-0-0-0-0-0-0-0-0,MarketCount,1-1-8-73164680-3-0-0-0-1-0-0-0-0-0-1-0-0-0-0-0-0-0-0,False,1' >
+							<div class="wideLeftColumn hasStatsIcon">
+							    <div class="ippg-Market_GameDetail">
+							        <div class="ippg-Market_GameItem ">
+							            <div class="ippg-Market_CompetitorName">
+							                <span class="ippg-Market_Truncator">Chelsea</span>
+							            </div>
+                                        <div class="ippg-Market_CompetitorScores">
+                                            <span class="ippg-PointNode"></span>
+                                        </div>
+							        </div>
+                                    <div class="ippg-Market_GameItem ">
+                                        <div class="ippg-Market_CompetitorName">
+                                            <span class="ippg-Market_Truncator">Liverpool</span>
+                                        </div><div class="ippg-Market_CompetitorScores">
+                                            <span class="ippg-PointNode"></span>
+                                        </div>
+                                    </div>
+                                    <div class="ippg-Market_MetaContainer ">									
+                                        <div class="ippg-Market_GameStartTime">16:30</div>							            
+                                        <div class="ippg-Market_GameInfo ">			  								
+										</div>
+                                        
+									        <div class="ippg-Market_MarketCount">72</div>
+								        
+                                        
+    <div id="FixtureIconsContainer">
+    
+    </div>
+	<div id="StatsIconContainer">
+    	<a class="icon-stats" target="_blank" data-nav="externalLink" href="http://www.stats.betradar.com/s4/?clientid=259&matchid=11830338&language=en-GB"></a>
+	</div>
+
+
+							        </div>
+							    </div>
+                            </div>
+							
+							
+                                        <div class="ippg-Market_Topic priceColumn" 
+                                              data-nav="pt=N#o=6/5#f=73164680#fp=1619655592#so=0#c=1#" 
+                                             data-inplaytopic=""
+                                             data-pgfpId="1619655592"
+                                             data-inplaymarkettopic="" 
+                                             data-inplayaltmarkettopic="" >
+                                            <span class="ippg-Market_Odds">6/5</span>
+                                        </div>
+									
+                                        <div class="ippg-Market_Topic priceColumn" 
+                                              data-nav="pt=N#o=5/2#f=73164680#fp=1619655593#so=0#c=1#" 
+                                             data-inplaytopic=""
+                                             data-pgfpId="1619655593"
+                                             data-inplaymarkettopic="" 
+                                             data-inplayaltmarkettopic="" >
+                                            <span class="ippg-Market_Odds">5/2</span>
+                                        </div>
+									
+                                        <div class="ippg-Market_Topic priceColumn" 
+                                              data-nav="pt=N#o=21/10#f=73164680#fp=1619655594#so=0#c=1#" 
+                                             data-inplaytopic=""
+                                             data-pgfpId="1619655594"
+                                             data-inplaymarkettopic="" 
+                                             data-inplayaltmarkettopic="" >
+                                            <span class="ippg-Market_Odds">21/10</span>
+                                        </div>
+									
+							</div> 
+                        
+						
+				</div>
+			
+        <div class="menuPopOut">
+            <ul>
+    
+                <li class="cc_12_7">
+                    
+                       <span class="selected">Full Time Result</span>
+                    
+                    
+                </li>
+    
+                <li class="cc_65_2">
+                    
+                    
+                        <span data-nav="couponLink" data-sportskey="1-1-195-33577327-2-1-0-0-1-0-0-4105-0-0-1-0-0-0-0-0-0-0-0">Double Chance</span>
+                    
+                </li>
+    
+                <li class="cc_4_4">
+                    
+                    
+                        <span data-nav="couponLink" data-sportskey="1-1-56-33577327-2-1-0-0-1-0-0-4050-0-0-1-0-0-0-0-0-0-0-0">Goals Over/Under</span>
+                    
+                </li>
+    
+                <li class="cc_65_5">
+                    
+                    
+                        <span data-nav="couponLink" data-sportskey="1-1-170-33577327-2-1-0-0-1-0-0-4052-0-0-1-0-0-0-0-0-0-0-0">Both Teams to Score</span>
+                    
+                </li>
+    
+                <li class="cc_34_8">
+                    
+                    
+                        <span data-nav="couponLink" data-sportskey="1-1-587-33577327-2-1-0-0-1-0-0-4160-0-0-1-0-0-0-0-0-0-0-0">Result/Both Teams to Score</span>
+                    
+                </li>
+    
+                <li class="cc_34_5">
+                    
+                    
+                        <span data-nav="couponLink" data-sportskey="1-1-14-33577329-2-1-0-0-1-0-0-4085-0-0-1-0-0-0-0-0-0-0-0">Asian Handicap & Goal Line</span>
+                    
+                </li>
+    
+                <li class="cc_76_6">
+                    
+                    
+                        <span data-nav="couponLink" data-sportskey="1-1-487-33577329-2-1-0-0-1-0-0-4085-0-0-1-0-0-0-0-0-0-0-0">1st Half Asians</span>
+                    
+                </li>
+    
+                <li class="cc_65_2">
+                    
+                    
+                        <span data-nav="couponLink" data-sportskey="1-1-491-33577329-2-1-0-0-1-0-0-4087-0-0-1-0-0-0-0-0-0-0-0">Asian Cards</span>
+                    
+                </li>
+    
+                <li class="cc_4_7">
+                    
+                    
+                        <span data-nav="couponLink" data-sportskey="1-1-451-33577329-2-1-0-0-1-0-0-4087-0-0-1-0-0-0-0-0-0-0-0">Asian Corners</span>
+                    
+                </li>
+    
+                <li class="cc_76_3">
+                    
+                    
+                        <span data-nav="couponLink" data-sportskey="1-1-197-33577327-2-1-0-0-1-0-0-4053-0-0-1-0-0-0-0-0-0-0-0">Draw No Bet</span>
+                    
+                </li>
+    
+                <li class="cc_12_7">
+                    
+                    
+                        <span data-nav="couponLink" data-sportskey="1-1-126-33577327-2-1-0-0-1-0-0-4051-0-0-1-0-0-0-0-0-0-0-0">Goals Odd/Even</span>
+                    
+                </li>
+    
+            </ul>
+        </div>
+        <div class="menuPopOutPointer">
+        </div>
+        <script type="text/javascript">
+
+            // b365Mobile.coupon.positionChangeMarketLink();
+
+        </script>
+    
+
+	
+	
+	
+	<div class="qb-JsonData" style="display:none;"><script type="text/b365data">{"F":[{"CL":null,"FD":"West Ham v Man City","FB":false,"ML":[{"MD":"Full Time Result","PI":40,"PL":[{"PD":"West Ham","ID":1611908791,"BS":"pt=N#o=10/1#f=72969846#fp=1611908791#so=0#c=1#","US":false},{"PD":"Draw","ID":1611908792,"BS":"pt=N#o=5/1#f=72969846#fp=1611908792#so=0#c=1#","US":false},{"PD":"Man City","ID":1611908793,"BS":"pt=N#o=3/10#f=72969846#fp=1611908793#so=0#c=1#","US":false}]}]},{"CL":null,"FD":"Man Utd v Arsenal","FB":false,"ML":[{"MD":"Full Time Result","PI":40,"PL":[{"PD":"Man Utd","ID":1611908838,"BS":"pt=N#o=2/5#f=72969853#fp=1611908838#so=0#c=1#","US":false},{"PD":"Draw","ID":1611908840,"BS":"pt=N#o=17/4#f=72969853#fp=1611908840#so=0#c=1#","US":false},{"PD":"Arsenal","ID":1611908842,"BS":"pt=N#o=7/1#f=72969853#fp=1611908842#so=0#c=1#","US":false}]}]},{"CL":null,"FD":"Tottenham v Watford","FB":false,"ML":[{"MD":"Full Time Result","PI":40,"PL":[{"PD":"Tottenham","ID":1611908944,"BS":"pt=N#o=1/6#f=72969857#fp=1611908944#so=0#c=1#","US":false},{"PD":"Draw","ID":1611908946,"BS":"pt=N#o=15/2#f=72969857#fp=1611908946#so=0#c=1#","US":false},{"PD":"Watford","ID":1611908948,"BS":"pt=N#o=20/1#f=72969857#fp=1611908948#so=0#c=1#","US":false}]}]},{"CL":null,"FD":"Brighton v Man Utd","FB":false,"ML":[{"MD":"Full Time Result","PI":40,"PL":[{"PD":"Brighton","ID":1619655300,"BS":"pt=N#o=9/2#f=73164660#fp=1619655300#so=0#c=1#","US":false},{"PD":"Draw","ID":1619655301,"BS":"pt=N#o=3/1#f=73164660#fp=1619655301#so=0#c=1#","US":false},{"PD":"Man Utd","ID":1619655302,"BS":"pt=N#o=4/7#f=73164660#fp=1619655302#so=0#c=1#","US":false}]}]},{"CL":null,"FD":"Stoke v Crystal Palace","FB":false,"ML":[{"MD":"Full Time Result","PI":40,"PL":[{"PD":"Stoke","ID":1619655313,"BS":"pt=N#o=6/4#f=73164662#fp=1619655313#so=0#c=1#","US":false},{"PD":"Draw","ID":1619655314,"BS":"pt=N#o=11/5#f=73164662#fp=1619655314#so=0#c=1#","US":false},{"PD":"Crystal Palace","ID":1619655315,"BS":"pt=N#o=15/8#f=73164662#fp=1619655315#so=0#c=1#","US":false}]}]},{"CL":null,"FD":"Bournemouth v Swansea","FB":false,"ML":[{"MD":"Full Time Result","PI":40,"PL":[{"PD":"Bournemouth","ID":1619655326,"BS":"pt=N#o=11/10#f=73164664#fp=1619655326#so=0#c=1#","US":false},{"PD":"Draw","ID":1619655327,"BS":"pt=N#o=23/10#f=73164664#fp=1619655327#so=0#c=1#","US":false},{"PD":"Swansea","ID":1619655328,"BS":"pt=N#o=5/2#f=73164664#fp=1619655328#so=0#c=1#","US":false}]}]},{"CL":null,"FD":"Leicester v West Ham","FB":false,"ML":[{"MD":"Full Time Result","PI":40,"PL":[{"PD":"Leicester","ID":1619655339,"BS":"pt=N#o=11/10#f=73164666#fp=1619655339#so=0#c=1#","US":false},{"PD":"Draw","ID":1619655340,"BS":"pt=N#o=5/2#f=73164666#fp=1619655340#so=0#c=1#","US":false},{"PD":"West Ham","ID":1619655341,"BS":"pt=N#o=12/5#f=73164666#fp=1619655341#so=0#c=1#","US":false}]}]},{"CL":null,"FD":"Watford v Newcastle","FB":false,"ML":[{"MD":"Full Time Result","PI":40,"PL":[{"PD":"Watford","ID":1619655354,"BS":"pt=N#o=7/5#f=73164668#fp=1619655354#so=0#c=1#","US":false},{"PD":"Draw","ID":1619655355,"BS":"pt=N#o=9/4#f=73164668#fp=1619655355#so=0#c=1#","US":false},{"PD":"Newcastle","ID":1619655356,"BS":"pt=N#o=19/10#f=73164668#fp=1619655356#so=0#c=1#","US":false}]}]},{"CL":null,"FD":"West Brom v Tottenham","FB":false,"ML":[{"MD":"Full Time Result","PI":40,"PL":[{"PD":"West Brom","ID":1619655379,"BS":"pt=N#o=15/2#f=73164670#fp=1619655379#so=0#c=1#","US":false},{"PD":"Draw","ID":1619655380,"BS":"pt=N#o=15/4#f=73164670#fp=1619655380#so=0#c=1#","US":false},{"PD":"Tottenham","ID":1619655381,"BS":"pt=N#o=4/11#f=73164670#fp=1619655381#so=0#c=1#","US":false}]}]},{"CL":null,"FD":"Everton v Southampton","FB":false,"ML":[{"MD":"Full Time Result","PI":40,"PL":[{"PD":"Everton","ID":1619655419,"BS":"pt=N#o=29/20#f=73164673#fp=1619655419#so=0#c=1#","US":false},{"PD":"Draw","ID":1619655422,"BS":"pt=N#o=23/10#f=73164673#fp=1619655422#so=0#c=1#","US":false},{"PD":"Southampton","ID":1619655424,"BS":"pt=N#o=9/5#f=73164673#fp=1619655424#so=0#c=1#","US":false}]}]},{"CL":null,"FD":"Man City v Huddersfield","FB":false,"ML":[{"MD":"Full Time Result","PI":40,"PL":[{"PD":"Man City","ID":1619655519,"BS":"pt=N#o=1/10#f=73164675#fp=1619655519#so=0#c=1#","US":false},{"PD":"Draw","ID":1619655521,"BS":"pt=N#o=8/1#f=73164675#fp=1619655521#so=0#c=1#","US":false},{"PD":"Huddersfield","ID":1619655523,"BS":"pt=N#o=20/1#f=73164675#fp=1619655523#so=0#c=1#","US":false}]}]},{"CL":null,"FD":"Arsenal v Burnley","FB":false,"ML":[{"MD":"Full Time Result","PI":40,"PL":[{"PD":"Arsenal","ID":1619655566,"BS":"pt=N#o=1/2#f=73164677#fp=1619655566#so=0#c=1#","US":false},{"PD":"Draw","ID":1619655567,"BS":"pt=N#o=3/1#f=73164677#fp=1619655567#so=0#c=1#","US":false},{"PD":"Burnley","ID":1619655568,"BS":"pt=N#o=6/1#f=73164677#fp=1619655568#so=0#c=1#","US":false}]}]},{"CL":null,"FD":"Chelsea v Liverpool","FB":false,"ML":[{"MD":"Full Time Result","PI":40,"PL":[{"PD":"Chelsea","ID":1619655592,"BS":"pt=N#o=6/5#f=73164680#fp=1619655592#so=0#c=1#","US":false},{"PD":"Draw","ID":1619655593,"BS":"pt=N#o=5/2#f=73164680#fp=1619655593#so=0#c=1#","US":false},{"PD":"Liverpool","ID":1619655594,"BS":"pt=N#o=21/10#f=73164680#fp=1619655594#so=0#c=1#","US":false}]}]}]}</script></div>
+</div>
+
+
+        
+        
+        
+        
+<div class="enhancedPod cc_34_8">
+    <h1><em>Related Markets
+</em></h1>
+    <div class="eventWrapper">
+        
+                <div class="colOne podSplashRow " cc_4_7" data-nav="couponLink" data-sportsKey="1-172-1-36041244-2-0-0-0-2-0-0-4063-0-0-1-0-0-0-0-0-0-0-0"><span>To Win Outright 2018/19</span></div>
+            
+                <div class="  podSplashRow " cc_76_0" data-nav="couponLink" data-sportsKey="1-172-1-35173276-2-0-0-0-2-0-0-4063-0-0-1-0-0-0-0-0-0-0-0"><span>Without Man City</span></div>
+            
+                <div class="colOne podSplashRow " cc_4_4" data-nav="couponLink" data-sportsKey="1-172-1-33623030-2-0-0-0-2-0-0-4063-0-0-1-0-0-0-0-0-0-0-0"><span>Top Goalscorer</span></div>
+            
+                <div class="  podSplashRow " cc_12_1" data-nav="couponLink" data-sportsKey="1-172-1-33558878-2-0-0-0-2-0-0-4063-0-0-1-0-0-0-0-0-0-0-0"><span>To Finish in Bottom Half</span></div>
+            
+                <div class="colOne podSplashRow " cc_76_0" data-nav="couponLink" data-sportsKey="1-172-1-33206227-2-0-0-0-2-0-0-4063-0-0-1-0-0-0-0-0-0-0-0"><span>To be Relegated</span></div>
+            
+                <div class="  podSplashRow " cc_34_8" data-nav="couponLink" data-sportsKey="1-172-1-33485701-2-0-0-0-2-0-0-4061-0-0-1-0-0-0-0-0-0-0-0"><span>Not to be Relegated</span></div>
+            
+                <div class="colOne podSplashRow " cc_4_1" data-nav="couponLink" data-sportsKey="1-172-1-33956794-2-0-0-0-2-0-0-4063-0-0-1-0-0-0-0-0-0-0-0"><span>Relegated Teams</span></div>
+            
+                <div class="  podSplashRow " cc_34_5" data-nav="couponLink" data-sportsKey="1-172-1-36953820-2-0-0-0-2-0-0-4061-0-0-1-0-0-0-0-0-0-0-0"><span>Relegation Yes/No</span></div>
+            
+                <div class="colOne podSplashRow " cc_12_4" data-nav="couponLink" data-sportsKey="1-172-1-33506076-2-0-0-0-2-0-0-4063-0-0-1-0-0-0-0-0-0-0-0"><span>To Finish Bottom</span></div>
+            
+                <div class="  podSplashRow " cc_76_0" data-nav="couponLink" data-sportsKey="1-172-1-33206213-2-0-0-0-2-0-0-4063-0-0-1-0-0-0-0-0-0-0-0"><span>To Finish in Top 4</span></div>
+            
+                <div class="colOne podSplashRow " cc_17_6" data-nav="couponLink" data-sportsKey="1-172-1-33506213-2-0-0-0-2-0-0-4063-0-0-1-0-0-0-0-0-0-0-0"><span>To Finish in Top 6</span></div>
+            
+                <div class="  podSplashRow " cc_65_2" data-nav="couponLink" data-sportsKey="1-172-1-33558876-2-0-0-0-2-0-0-4063-0-0-1-0-0-0-0-0-0-0-0"><span>To Finish in Top Half</span></div>
+            
+                <div class="colOne podSplashRow lastWideRow lastRow" cc_65_2" data-nav="couponLink" data-sportsKey="1-172-1-33485925-2-0-0-0-2-0-0-4061-0-0-1-0-0-0-0-0-0-0-0"><span>Not to Finish in Top 4</span></div>
+            
+         
+                <div class="podSplashRow empty lastWideRow"></div>
+         
+    </div>
+   
+</div>
+
+        <input id="AutoRefresh" type="hidden" value="" />
+        <input id="SortRefreshKey" type="hidden" value="1-1-13-33577327-2-1-0-0-1-0-0-4100-0-0-1-0-0-0-0-0-0-0-0" />
+        <input id="CpKey" type="hidden" value="1-1-13-33577327-2-1-0-0-1-0-0-4100-0-0-1-0-0-0-0-0-0-0-0" />
+    </div>
+
+            </div>
+			         
+    </div>
+
+<span id="loadChk"></span> 
