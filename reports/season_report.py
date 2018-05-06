@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import numpy as np
+import time
 
 from terminaltables import SingleTable
 
@@ -46,11 +47,22 @@ class SeasonReport:
         top = colorize(top, color(top))
         relegation = colorize(relegation, color(relegation))
 
-        meaningful_positions = SingleTable([
-            ['League Position', 'To 1th', 'To 4th', 'To 6th', 'To Relegation zone'],
-            [self.team_pos+1, top, top_4, top_6, relegation]
+        top_SR = self.top_table_success_rate()
+        bottom_SR = self.bottom_table_success_rate()
+
+        stats = SingleTable([
+            [
+                'League Position', 'To 1th', 'To 4th', 'To 6th',
+                'To Relegation zone', 'Top table success rate',
+                'Bottom table success rate'
+            ],
+            [
+                self.team_pos+1, top, top_4, top_6,
+                relegation, top_SR, bottom_SR
+            ]
         ])
-        print(meaningful_positions.table)
+        print(stats.table)
+
 
     def relegation_zone(self):
         """ distance to last 3 teams or to the safe zone """
@@ -75,3 +87,33 @@ class SeasonReport:
         position = 1 if self.team_pos == 0 else 0
         points = self.table[position][self.POINTS]
         return points - self.team_data[self.POINTS]
+
+    def top_table_success_rate(self):
+        """ Success rate with teams from the first half """
+        index = int(len(self.table)/2)
+        top_teams = [t[0] for t in self.table[:index] if t[0] != self.team]
+        top_table_games = self.filter_games(top_teams)
+
+        score = []
+        for game in top_table_games:
+            score.append(self.dataset.game_success_rate(game, self.team))
+
+        return np.mean(score)
+
+    def bottom_table_success_rate(self):
+        """ Success rate with teams from the second half """
+        index = int(len(self.table)/2)
+        bottom_teams = [t[0] for t in self.table[index:] if t[0] != self.team]
+        bottom_table_games = self.filter_games(bottom_teams)
+
+        score = []
+        for game in bottom_table_games:
+            score.append(self.dataset.game_success_rate(game, self.team))
+
+        return np.mean(score)
+
+    def filter_games(self, teams_in):
+        games = self.dataset.get_games(self.team)
+        return filter(
+            lambda g: g[self.dataset.HOME] in teams_in or g[self.dataset.AWAY] in teams_in, games
+        )

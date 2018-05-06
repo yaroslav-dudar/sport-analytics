@@ -71,6 +71,9 @@ class DataSet:
 
         ts_date = time.mktime(time.strptime(date, '%d/%m/%y'))
         prev_data = self.data[self.TS_DATES < ts_date]
+        if prev_data.size == 0:
+            return 0
+
         condition = self.filter(team, filter_by, prev_data)
 
         # Precondition: games already sorted by date
@@ -78,17 +81,22 @@ class DataSet:
 
         score = 0
         for game in team_games:
-            if game[self.HOME] == team:
-                if game[self.FTR] == 'H':
-                    score += 1
-            elif game[self.AWAY] == team:
-                if game[self.FTR] == 'A':
-                    score += 1
-
-            if game[self.FTR] == 'D':
-                score += 0.5
+            score += self.game_success_rate(game, team)
 
         return score/prev_games
+
+    def game_success_rate(self, game, team):
+        if game[self.HOME] == team:
+            if game[self.FTR] == 'H':
+                return 1
+        elif game[self.AWAY] == team:
+            if game[self.FTR] == 'A':
+                return 1
+
+        if game[self.FTR] == 'D':
+            return 0.5
+
+        return 0
 
     def get_position(self, date, team):
         """ Get team league position before given date """
