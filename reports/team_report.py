@@ -54,7 +54,7 @@ class TeamReport:
 
         stats = TeamStats(self.team, self.games)
 
-        date = time.strftime('%d/%m/%y', time.gmtime())
+        date = time.strftime(self.dataset.date_format, time.gmtime())
         team_recent_form = self.dataset.get_success_rate(
             date, self.team, self.amount_games, self.filter_by
         )

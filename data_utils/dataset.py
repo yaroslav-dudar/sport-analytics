@@ -29,8 +29,9 @@ class DataSet:
     def __init__(self, data):
         self.data = data
 
+        self.date_format = "%b %d %Y - %I:%M%p"
         self.TS_DATES = np.array([
-            time.mktime(time.strptime(d, '%d/%m/%y')) for d in self.data[:,self.DATE]
+            time.mktime(time.strptime(d, self.date_format)) for d in self.data[:,self.DATE]
         ])
 
     def get_games(self, team, filter_by='all'):
@@ -69,7 +70,7 @@ class DataSet:
             result = sum(game_form) / prev_games
         """
 
-        ts_date = time.mktime(time.strptime(date, '%d/%m/%y'))
+        ts_date = time.mktime(time.strptime(date, self.date_format))
         prev_data = self.data[self.TS_DATES < ts_date]
         if prev_data.size == 0:
             return 0
@@ -101,7 +102,7 @@ class DataSet:
     def get_position(self, date, team):
         """ Get team league position before given date """
 
-        ts_date = time.mktime(time.strptime(date, '%d/%m/%y'))
+        ts_date = time.mktime(time.strptime(date, self.date_format))
         # all gemes before <game_date>
         prev_games = self.data[self.TS_DATES < ts_date]
 
