@@ -29,8 +29,8 @@ class FootyStatsOrg(DataSource):
         self.AWAY = self.columns.index('away_team_name')
         self.FTR = self.columns.index('result')
 
-        self.HS = self.columns.index('home_team_goal_count')
-        self.AS = self.columns.index('away_team_goal_count')
+        self.HS = self.columns.index('home_team_shots')
+        self.AS = self.columns.index('away_team_shots')
 
         self.HST = self.columns.index('home_team_shots_on_target')
         self.AST = self.columns.index('away_team_shots_on_target')
